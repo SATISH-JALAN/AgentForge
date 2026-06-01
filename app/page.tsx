@@ -108,6 +108,7 @@ export default function HomePage() {
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [activeTab, setActiveTab] = useState<'contracts' | 'sandbox' | 'cli' | 'trading'>('contracts');
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   // Paper trading mock state
   const [usdBalance, setUsdBalance] = useState(10000);
@@ -868,6 +869,52 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── PIPELINE DIAGRAMS SHOWCASE ────────────────────────────────────────── */}
+      <section className="py-20 px-4 max-w-7xl mx-auto border-t border-white/5">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="page-kicker">System Architecture</div>
+          <h2 className="mt-4 font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+            Comprehensive Pipeline Workflows.
+          </h2>
+          <p className="mt-4 text-sm sm:text-base text-gray-400">
+            Explore the detailed architectural flows and execution layers that power AgentForge.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          {[
+            { src: '/full%20workflow.png', name: 'Full Workflow Pipeline', isLarge: true },
+            { src: '/0x402%20pipeline.png', name: '0x402 Pipeline', isLarge: false },
+            { src: '/CRUD%20pipeline.png', name: 'CRUD Pipeline', isLarge: false },
+            { src: '/Gpu%20pipeline.png', name: 'GPU Pipeline', isLarge: false },
+            { src: '/T54%20trust%20layer%20pipeline.png', name: 'T54 Trust Layer Pipeline', isLarge: false },
+            { src: '/dev%20toolkit%20pipeline.png', name: 'Dev Toolkit Pipeline', isLarge: false, isCentered: true }
+          ].map((diagram, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              onClick={() => setExpandedImage(diagram.src)}
+              className={`page-panel group border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer ${diagram.isLarge ? 'md:col-span-2' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
+            >
+              <div className="relative w-full bg-black/40 p-8 sm:p-12 flex items-center justify-center">
+                <img 
+                  src={diagram.src} 
+                  alt={diagram.name}
+                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] opacity-85 group-hover:opacity-100"
+                />
+              </div>
+              <div className="p-6 border-t border-white/5 bg-black/20 flex items-center justify-between">
+                <h3 className="font-mono text-base md:text-lg font-bold text-white tracking-wider">{diagram.name}</h3>
+                <span className="text-[var(--color-green-strong)] opacity-0 group-hover:opacity-100 transition-opacity font-mono text-2xl">↗</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* ── FOOTER CORE VISION BANNER ────────────────────────────────────────── */}
       <section className="py-24 px-4 max-w-7xl mx-auto border-t border-white/5 text-center relative overflow-hidden">
         {/* Subtle grid lines background overlay */}
@@ -883,15 +930,48 @@ export default function HomePage() {
             AgentForge starts centralized for rapid iteration, but its components are completely modular. Future upgrades will support remote runners, zero-knowledge proofs of execution, decentralized nodes, staking, and SLA slashing policies.
           </p>
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/build" className="cta-primary text-xs px-6 py-3.5 rounded-xl font-bold uppercase tracking-wider">
-              Start Building Now
-            </Link>
             <Link href="/docs" className="cta-secondary text-xs px-6 py-3.5 rounded-xl font-bold uppercase tracking-wider text-gray-300 hover:text-white">
               Read Documentation
             </Link>
           </div>
         </div>
       </section>
+
+      {/* ── IMAGE LIGHTBOX MODAL ────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {expandedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-8 cursor-zoom-out"
+            onClick={() => setExpandedImage(null)}
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute top-6 right-6 z-[110] p-3 bg-white/10 hover:bg-[var(--color-green-strong)] text-white hover:text-black rounded-full backdrop-blur-md transition-colors"
+              onClick={() => setExpandedImage(null)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </motion.button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              src={expandedImage}
+              alt="Expanded Workflow"
+              className="max-w-full max-h-[90vh] object-contain drop-shadow-[0_0_40px_rgba(46,242,142,0.15)] rounded-xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

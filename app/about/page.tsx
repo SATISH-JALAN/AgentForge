@@ -10,10 +10,6 @@ export default function AboutPage() {
         eyebrow="About"
         title={<>A Stellar-native execution layer for autonomous agents.</>}
         description={<>AgentForge binds identity, workflow orchestration, payments, and sandboxed execution into one programmable runtime.</>}
-        actions={[
-          { href: '/build', label: 'Build an Agent' },
-          { href: '/dashboard', label: 'Open Dashboard', variant: 'secondary' },
-        ]}
       />
 
       <div className="page-shell space-y-10">

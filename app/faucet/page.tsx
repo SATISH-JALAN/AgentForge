@@ -175,10 +175,6 @@ export default function FaucetPage() {
         eyebrow="Faucet"
         title={<>Claim AF$ tokens for testing and deployment.</>}
         description={<>Use the faucet to fund trading, staking, and agent trials on the platform. Claims are limited and tied to your Stellar wallet.</>}
-        actions={[
-          { href: '/build', label: 'Build an Agent' },
-          { href: '/dashboard', label: 'Open Dashboard', variant: 'secondary' },
-        ]}
         stats={[
           { label: 'Per Claim', value: `${FAUCET_AMOUNT} AF$` },
           { label: 'Max Claims', value: `${MAX_CLAIMS}×` },
