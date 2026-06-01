@@ -368,12 +368,22 @@ export default function HomePage() {
 
                 <div className="space-y-4">
                   {FEATURE_SPEC.map((spec) => (
-                    <div key={spec.title} className="page-panel-soft p-4 flex gap-4 items-start">
-                      <div className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: spec.color }} />
-                      <div>
-                        <h4 className="text-sm font-bold text-white">{spec.title}</h4>
-                        <span className="text-[10px] font-mono text-gray-500 block mb-1 uppercase tracking-wider">{spec.subtitle}</span>
-                        <p className="text-xs text-gray-400">{spec.description}</p>
+                    <div key={spec.title} className="group relative p-5 rounded-2xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/10 transition-all duration-300 overflow-hidden">
+                      {/* Subtle glow behind the card on hover */}
+                      <div 
+                        className="absolute -inset-1 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-2xl z-0 pointer-events-none" 
+                        style={{ backgroundColor: spec.color }} 
+                      />
+                      
+                      <div className="relative z-10 flex gap-4 items-start">
+                        <div className="mt-1 shrink-0 p-2 rounded-lg bg-[#0b0b11] border border-white/5 shadow-inner">
+                          <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor]" style={{ backgroundColor: spec.color, color: spec.color }} />
+                        </div>
+                        <div>
+                          <h4 className="text-[15px] font-bold text-white mb-1 tracking-wide">{spec.title}</h4>
+                          <span className="text-[10px] font-mono text-gray-500 block mb-2 uppercase tracking-widest" style={{ color: spec.color }}>{spec.subtitle}</span>
+                          <p className="text-xs text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{spec.description}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -381,9 +391,10 @@ export default function HomePage() {
               </div>
 
               {/* Execution State Interactive Widget */}
-              <div className="page-panel p-6 sm:p-8 flex flex-col justify-between border-white/10 bg-[#08080f]/70">
-                <div>
-                  <div className="flex items-center justify-between mb-6">
+              <div className="page-panel p-6 sm:p-8 flex flex-col justify-between border-white/10 bg-[#08080f]/70 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[var(--color-green-strong)] opacity-[0.02] blur-[80px] pointer-events-none group-hover:opacity-[0.04] transition-opacity duration-700" />
+                <div className="relative z-10">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                     <span className="font-mono text-xs text-gray-500">CONTRACT LOGIC: ExecutionManager.soroban</span>
                     <span className="px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-950/20 font-mono text-[9px] text-emerald-400 font-bold uppercase tracking-widest">
                       Ledger Verified
@@ -411,8 +422,8 @@ export default function HomePage() {
                           key={step.id}
                           onClick={() => setActiveStep(step.id as typeof activeStep)}
                           className={`relative z-10 p-4 rounded-xl border text-left transition-all duration-300 ${isActive
-                              ? 'border-[var(--color-green-strong)] bg-[rgba(46,242,142,0.06)] shadow-[0_0_20px_rgba(46,242,142,0.05)]'
-                              : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
+                              ? 'border-[var(--color-green-strong)] bg-gradient-to-br from-[rgba(46,242,142,0.08)] to-transparent shadow-[0_0_20px_rgba(46,242,142,0.05)]'
+                              : 'border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]'
                             }`}
                         >
                           <div className="flex items-center justify-between mb-2">
@@ -488,18 +499,21 @@ export default function HomePage() {
                       <button
                         key={folder.title}
                         onClick={() => setSelectedFolder(folder.title as typeof selectedFolder)}
-                        className={`p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between ${isSelected
-                            ? 'border-[#00FFE5] bg-[rgba(0,255,229,0.06)]'
-                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
+                        className={`group relative p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between overflow-hidden ${isSelected
+                            ? 'border-[#00FFE5]/50 bg-gradient-to-r from-[rgba(0,255,229,0.1)] to-[rgba(0,255,229,0.02)] shadow-[0_0_20px_rgba(0,255,229,0.1)]'
+                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]'
                           }`}
                       >
-                        <div>
-                          <div className={`font-mono text-xs font-bold ${isSelected ? 'text-white' : 'text-gray-300'}`}>
-                            📁 {folder.title}
+                        {/* Glow effect on select/hover */}
+                        <div className={`absolute inset-0 bg-gradient-to-r from-[#00FFE5] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} pointer-events-none />
+                        
+                        <div className="relative z-10">
+                          <div className={`font-mono text-xs font-bold transition-colors ${isSelected ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>
+                            <span className="opacity-70 mr-2">📁</span>{folder.title}
                           </div>
-                          <div className="text-[10px] text-gray-500 font-mono mt-1">{folder.size}</div>
+                          <div className={`text-[10px] font-mono mt-1 transition-colors ${isSelected ? 'text-[#00FFE5]/80' : 'text-gray-500 group-hover:text-gray-400'}`}>{folder.size}</div>
                         </div>
-                        <span className={`font-mono text-xs ${isSelected ? 'text-[#00FFE5]' : 'text-gray-700'}`}>➔</span>
+                        <span className={`relative z-10 font-mono text-xs transition-colors ${isSelected ? 'text-[#00FFE5]' : 'text-gray-700 group-hover:text-gray-500'}`}>➔</span>
                       </button>
                     );
                   })}
@@ -554,8 +568,9 @@ export default function HomePage() {
               className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]"
             >
               {/* Simulated Terminal Widget */}
-              <div className="page-panel p-6 border-white/10 bg-[#040407] font-mono flex flex-col min-h-[360px] justify-between">
-                <div>
+              <div className="page-panel p-6 border-white/10 bg-[#040407] font-mono flex flex-col min-h-[360px] justify-between relative group overflow-hidden">
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-[var(--color-green-strong)] opacity-[0.02] blur-[80px] pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-700" />
+                <div className="relative z-10">
                   {/* Top terminal bar */}
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5 text-xs text-gray-500">
                     <div className="flex items-center gap-1.5">
@@ -622,12 +637,15 @@ export default function HomePage() {
                         key={item.cmd}
                         onClick={() => setCliCommand(item.cmd as typeof cliCommand)}
                         disabled={isTyping}
-                        className={`w-full p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between disabled:opacity-50 ${isSelected
-                            ? 'border-[var(--color-green-strong)] bg-[rgba(46,242,142,0.06)]'
-                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
+                        className={`group relative w-full p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between disabled:opacity-50 overflow-hidden ${isSelected
+                            ? 'border-[var(--color-green-strong)]/50 bg-gradient-to-r from-[rgba(46,242,142,0.1)] to-[rgba(46,242,142,0.02)] shadow-[0_0_20px_rgba(46,242,142,0.1)]'
+                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]'
                           }`}
                       >
-                        <div>
+                        {/* Glow effect on hover/select */}
+                        <div className={`absolute inset-0 bg-gradient-to-r from-[var(--color-green-strong)] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} pointer-events-none />
+                        
+                        <div className="relative z-10">
                           <div className={`text-xs font-bold ${isSelected ? 'text-[var(--color-green-strong)]' : 'text-white'}`}>
                             {item.cmd}
                           </div>
@@ -662,21 +680,25 @@ export default function HomePage() {
                 </p>
 
                 {/* Simulated balances card */}
-                <div className="p-5 rounded-2xl border border-white/5 bg-[#0b0b11] font-mono grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-[9px] uppercase tracking-wider text-gray-500 block mb-1">Simulated Balance (USDC)</span>
-                    <span className="text-lg font-bold text-white">${usdBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] uppercase tracking-wider text-gray-500 block mb-1">Simulated Balance (XLM)</span>
-                    <span className="text-lg font-bold text-[#00FFE5]">{xlmBalance.toLocaleString()} XLM</span>
+                <div className="relative p-6 rounded-2xl border border-white/5 bg-[#08080f] shadow-inner font-mono overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#00FFE5] opacity-[0.03] blur-[40px] pointer-events-none" />
+                  <div className="relative z-10 grid grid-cols-2 gap-4">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-gray-500 block mb-1">Simulated Balance (USDC)</span>
+                      <span className="text-xl font-bold text-white">${usdBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-gray-500 block mb-1">Simulated Balance (XLM)</span>
+                      <span className="text-xl font-bold text-[#00FFE5]">{xlmBalance.toLocaleString()} XLM</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Form to submit a paper trade */}
-                <form onSubmit={handlePaperOrder} className="p-5 rounded-2xl border border-white/5 bg-white/[0.01] space-y-4">
-                  <div className="text-xs font-bold text-white font-mono flex items-center justify-between">
-                    <span>⚡ Submit Simulated Paper Order</span>
+                <form onSubmit={handlePaperOrder} className="relative p-6 rounded-2xl border border-white/5 bg-white/[0.01] space-y-5 overflow-hidden group hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
+                  <div className="absolute -inset-1 opacity-0 group-hover:opacity-10 transition-opacity duration-700 blur-2xl z-0 pointer-events-none bg-amber-500" />
+                  <div className="relative z-10 text-xs font-bold text-white font-mono flex items-center justify-between border-b border-white/5 pb-3">
+                    <span className="flex items-center gap-2"><span className="text-amber-500">⚡</span> Submit Simulated Paper Order</span>
                     {newOrderSuccess && (
                       <span className="text-[var(--color-green-strong)] font-bold animate-pulse">Order Executed Successfully!</span>
                     )}
@@ -709,8 +731,8 @@ export default function HomePage() {
                           type="button"
                           onClick={() => setTradeAsset('USDC')}
                           className={`py-2 rounded-lg font-mono text-[10px] font-bold border transition-all ${tradeAsset === 'USDC'
-                              ? 'border-red-500 text-red-500 bg-red-500/5'
-                              : 'border-white/10 text-gray-400'
+                              ? 'border-red-500 text-red-500 bg-red-500/10 shadow-[0_0_10px_rgba(239,68,68,0.1)]'
+                              : 'border-white/10 text-gray-400 hover:border-white/30'
                             }`}
                         >
                           SELL XLM
@@ -720,7 +742,7 @@ export default function HomePage() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-2.5 rounded-lg bg-[rgba(46,242,142,0.95)] hover:bg-[var(--color-green-strong)] text-[#041107] font-bold font-mono text-xs uppercase tracking-wider transition-all"
+                    className="relative z-10 w-full py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-green-strong)] to-[#00FFE5] text-black font-bold font-mono text-xs uppercase tracking-wider hover:brightness-110 hover:shadow-[0_0_20px_rgba(46,242,142,0.3)] transition-all duration-300"
                   >
                     Execute Swap via DexAdapter
                   </button>
@@ -728,8 +750,9 @@ export default function HomePage() {
               </div>
 
               {/* Live paper trades list */}
-              <div className="page-panel p-6 border-white/10 bg-[#08080f]/70 font-mono flex flex-col justify-between">
-                <div>
+              <div className="page-panel p-6 border-white/10 bg-[#08080f]/70 font-mono flex flex-col justify-between relative group overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-amber-500 opacity-[0.02] blur-[80px] pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-700" />
+                <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5 text-xs text-gray-500">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
