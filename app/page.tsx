@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Features for the outline
 const FEATURE_SPEC = [
@@ -243,10 +244,12 @@ export default function HomePage() {
 
         {/* 3D Emergent Hands Background (Inverted to glow white on pitch black) */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-30 select-none flex items-center justify-center">
-          <img
+          <Image
             src="/hands_creation.png"
             alt="Emergent 3D Hands Silhouette"
-            className="w-full h-full object-cover object-center invert brightness-[1.25] contrast-[1.25]"
+            fill
+            className="object-cover object-center invert brightness-[1.25] contrast-[1.25]"
+            priority
           />
         </div>
 
@@ -331,7 +334,7 @@ export default function HomePage() {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-semibold transition-all duration-300 ${activeTab === tab.id
                   ? 'bg-[rgba(46,242,142,0.09)] border border-[rgba(46,242,142,0.22)] text-[var(--color-green-strong)]'
                   : 'border border-transparent text-gray-500 hover:text-gray-300'
@@ -406,7 +409,7 @@ export default function HomePage() {
                       return (
                         <button
                           key={step.id}
-                          onClick={() => setActiveStep(step.id as any)}
+                          onClick={() => setActiveStep(step.id as typeof activeStep)}
                           className={`relative z-10 p-4 rounded-xl border text-left transition-all duration-300 ${isActive
                               ? 'border-[var(--color-green-strong)] bg-[rgba(46,242,142,0.06)] shadow-[0_0_20px_rgba(46,242,142,0.05)]'
                               : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
@@ -484,7 +487,7 @@ export default function HomePage() {
                     return (
                       <button
                         key={folder.title}
-                        onClick={() => setSelectedFolder(folder.title as any)}
+                        onClick={() => setSelectedFolder(folder.title as typeof selectedFolder)}
                         className={`p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between ${isSelected
                             ? 'border-[#00FFE5] bg-[rgba(0,255,229,0.06)]'
                             : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.02]'
@@ -617,7 +620,7 @@ export default function HomePage() {
                     return (
                       <button
                         key={item.cmd}
-                        onClick={() => setCliCommand(item.cmd as any)}
+                        onClick={() => setCliCommand(item.cmd as typeof cliCommand)}
                         disabled={isTyping}
                         className={`w-full p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between disabled:opacity-50 ${isSelected
                             ? 'border-[var(--color-green-strong)] bg-[rgba(46,242,142,0.06)]'
@@ -900,6 +903,7 @@ export default function HomePage() {
               className={`page-panel group border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer ${diagram.isLarge ? 'md:col-span-2' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
             >
               <div className="relative w-full bg-black/40 p-8 sm:p-12 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={diagram.src} 
                   alt={diagram.name}
@@ -959,6 +963,7 @@ export default function HomePage() {
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </motion.button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <motion.img
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}

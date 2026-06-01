@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
         const res = await supabase.from('agents').insert(insertPayload);
         // supabase-js may either throw or return { error }
         // handle both shapes
-        // @ts-ignore
+        // @ts-expect-error -- supabase-js may return different shapes
         const maybeError = res?.error ?? (res && res.error) ?? null;
         if (!maybeError) {
           agentError = null;

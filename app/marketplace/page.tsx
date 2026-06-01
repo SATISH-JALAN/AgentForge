@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import AgentCard from '@/components/AgentCard';
 import { Agent } from '@/types';
 import PageHero from '@/components/PageHero';
