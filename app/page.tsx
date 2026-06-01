@@ -313,7 +313,7 @@ export default function HomePage() {
       </section>
 
       {/* ── INTERACTIVE CORE SPECIFICATION SHOWCASE ──────────────────────────── */}
-      <section className="py-20 px-4 max-w-7xl mx-auto">
+      <section className="py-20 px-4 bg-[#050508]/90 max-w-full">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="page-kicker">Platform Specification</div>
           <h2 className="mt-4 font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white">
@@ -900,7 +900,7 @@ export default function HomePage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => setExpandedImage(diagram.src)}
-              className={`page-panel group border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer ${diagram.isLarge ? 'md:col-span-2' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
+              className={`page-panel group border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer ${diagram.isLarge ? 'md:col-span-2 max-w-4xl mx-auto w-full' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
             >
               <div className="relative w-full bg-black/40 p-8 sm:p-12 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
