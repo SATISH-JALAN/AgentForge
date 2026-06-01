@@ -241,26 +241,19 @@ export default function HomePage() {
         <div className="absolute top-1/2 right-1/4 translate-x-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(123,97,255,0.04)_0%,transparent_70%)] blur-[120px] pointer-events-none z-0" />
 
         {/* 3D Emergent Hands Background (Inverted to glow white on pitch black) */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-[520px] max-w-[1500px] mx-auto pointer-events-none z-0 overflow-hidden opacity-30 select-none">
+        <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-30 select-none flex items-center justify-center">
           <img
             src="/hands_creation.png"
             alt="Emergent 3D Hands Silhouette"
-            className="w-full h-full object-cover invert brightness-[1.25] contrast-[1.25] scale-[1.04] sm:scale-100"
+            className="w-full h-full object-cover object-center invert brightness-[1.25] contrast-[1.25]"
           />
         </div>
 
+        {/* Strong black fade overlay at the bottom to blend seamlessly */}
+        <div className="absolute bottom-0 left-0 w-full h-[60%] bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-[5]" />
+
         {/* Centered Hero Content layered on top of the hands background */}
         <div className="relative z-10 text-center max-w-5xl mx-auto space-y-8 select-text">
-          {/* Kicker badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(46,242,142,0.22)] bg-[rgba(46,242,142,0.06)] text-[10px] md:text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-green-strong)] glow-teal"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-green-strong)] animate-ping" />
-            AgentForge Execution Layer V1
-          </motion.div>
 
           {/* Bold Serif Headline, superimposed directly on the fingertips touching in the center */}
           <motion.h1
@@ -285,22 +278,7 @@ export default function HomePage() {
             Build portable, PRoot-sandboxed, monetizable agents with deterministic DAG workflows, secure agent-owned Stellar wallets, programmable payments, and cryptographically auditable runtimes on Soroban.
           </motion.p>
 
-          {/* Action CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-2"
-          >
-            <Link href="/build" className="cta-primary text-sm px-9 py-4 rounded-xl group transition-all duration-300 hover:shadow-[0_0_35px_rgba(46,242,142,0.35)] flex items-center gap-2">
-              Start Building
-              <span className="font-mono transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </Link>
-            <Link href="/dashboard" className="cta-secondary text-sm px-9 py-4 rounded-xl transition-all duration-300 hover:border-white/20 hover:bg-white/5 flex items-center gap-2 bg-black/40 backdrop-blur-sm">
-              Deploy Agent
-              <span className="font-mono text-gray-400">🚀</span>
-            </Link>
-          </motion.div>
+
 
           {/* Status Indicator */}
           <motion.div

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import AppShell from "@/components/AppShell";
 import AblyNotifications from "@/components/AblyNotifications";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "AgentForge — Programmble agentic execution layer on Stellar",
@@ -23,8 +24,11 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-[#050508] text-white">
         <Navbar />
-        <main className="pt-16">
-          <AppShell>{children}</AppShell>
+        <main className="pt-16 min-h-screen flex flex-col">
+          <div className="flex-grow">
+            <AppShell>{children}</AppShell>
+          </div>
+          <Footer />
         </main>
         <AblyNotifications />
       </body>
