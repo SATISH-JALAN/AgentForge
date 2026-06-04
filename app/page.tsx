@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -133,6 +134,94 @@ export default function HomePage() {
   });
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const showcaseSectionRef = useRef<HTMLElement | null>(null);
+  const showcaseHeaderRef = useRef<HTMLDivElement | null>(null);
+  const showcaseTabsRef = useRef<HTMLDivElement | null>(null);
+  const showcaseFeatureRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const showcaseMonitorRef = useRef<HTMLDivElement | null>(null);
+
+  const animateGlassCard = (element: HTMLElement | null, hovered: boolean) => {
+    if (!element) return;
+    // kill any existing tweens for this element first
+    gsap.killTweensOf(element);
+
+    const isMonitor = element.dataset.role === 'monitor';
+
+    if (hovered) {
+      if (isMonitor) {
+        // subtle lift + greenish glow pulse for monitor nodes
+        gsap.to(element, {
+          y: -6,
+          scale: 1.015,
+          borderColor: 'rgba(46,242,142,0.34)',
+          backgroundColor: 'rgba(46,242,142,0.04)',
+          boxShadow: '0 26px 70px rgba(46,242,142,0.08)',
+          duration: 0.28,
+          ease: 'power2.out',
+          overwrite: false
+        });
+
+        // gentle pulsing glow
+        gsap.to(element, {
+          boxShadow: '0 30px 90px rgba(46,242,142,0.12)',
+          duration: 0.9,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          overwrite: false
+        });
+      } else {
+        gsap.to(element, {
+          y: -8,
+          scale: 1.02,
+          backgroundColor: 'rgba(255,255,255,0.07)',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.34)',
+          duration: 0.28,
+          ease: 'power3.out',
+          overwrite: 'auto'
+        });
+      }
+    } else {
+      // revert state
+      if (isMonitor) {
+        gsap.to(element, {
+          y: 0,
+          scale: 1,
+          borderColor: 'rgba(255,255,255,0.08)',
+          backgroundColor: 'rgba(8,8,15,0.56)',
+          boxShadow: '0 14px 30px rgba(0,0,0,0.16)',
+          duration: 0.45,
+          ease: 'elastic.out(1, 0.6)'
+        });
+        // clear any repeating pulsing tweens
+        gsap.killTweensOf(element, { properties: 'boxShadow' });
+      } else {
+        gsap.to(element, {
+          y: 0,
+          scale: 1,
+          backgroundColor: 'rgba(8,8,15,0.56)',
+          boxShadow: '0 14px 30px rgba(0,0,0,0.16)',
+          duration: 0.45,
+          ease: 'power3.out',
+          overwrite: 'auto'
+        });
+      }
+    }
+  };
+
+  useLayoutEffect(() => {
+    const section = showcaseSectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(showcaseHeaderRef.current, { opacity: 0, y: 30, scale: 0.995 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power4.out' });
+      gsap.fromTo(showcaseTabsRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.06, ease: 'power3.out' });
+      gsap.fromTo(showcaseFeatureRefs.current.filter(Boolean), { opacity: 0, y: 36, scale: 0.985 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.09, delay: 0.12, ease: 'power3.out' });
+      gsap.fromTo(showcaseMonitorRef.current, { opacity: 0, x: 28, scale: 0.995 }, { opacity: 1, x: 0, scale: 1, duration: 0.9, delay: 0.2, ease: 'power3.out' });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
 
   // CLI log typing simulator
   useEffect(() => {
@@ -259,8 +348,15 @@ export default function HomePage() {
               <span className="block text-white leading-none">Agentic OS.</span>
               <span className="mt-[0.04em] block text-white leading-none">
                 Built on{' '}
-                <span className="bg-gradient-to-r from-white to-[var(--color-green-strong)] bg-clip-text text-transparent">
-                  Stellar.
+                <span className="inline-grid items-end align-bottom">
+                  <span className="col-start-1 row-start-1 invisible pointer-events-none pr-[2px] border-r-[0.08em] border-transparent">
+                    Stellar.
+                  </span>
+                  <span className="col-start-1 row-start-1 typewriter-text">
+                    <span className="bg-gradient-to-r from-white to-[var(--color-green-strong)] bg-clip-text text-transparent">
+                      Stellar.
+                    </span>
+                  </span>
                 </span>
               </span>
             </motion.h1>
@@ -330,26 +426,30 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        {/* Dynamic Selector Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-[#0b0b11] border border-white/5 rounded-2xl max-w-3xl mx-auto mb-12">
-          {[
-            { id: 'contracts', label: 'Soroban Contracts', icon: '📝' },
-            { id: 'sandbox', label: 'Sandboxed Filesystem', icon: '📦' },
-            { id: 'cli', label: 'CLI Developer DX', icon: '💻' },
-            { id: 'trading', label: 'Paper Trading Engine', icon: '📈' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-semibold transition-all duration-300 ${activeTab === tab.id
-                  ? 'bg-[rgba(46,242,142,0.09)] border border-[rgba(46,242,142,0.22)] text-[var(--color-green-strong)]'
-                  : 'border border-transparent text-gray-500 hover:text-gray-300'
-                }`}
-            >
-              <span>{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
+        {/* Dynamic Selector Tabs (glass shell) */}
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="rounded-[1.25rem] p-4 bg-[rgba(8,8,15,0.48)] border border-white/6 backdrop-blur-md shadow-lg mb-10">
+            <div ref={showcaseTabsRef} className="flex flex-wrap items-center justify-center gap-3 max-w-4xl mx-auto">
+              {[
+                { id: 'contracts', label: 'Soroban Contracts', icon: '📝' },
+                { id: 'sandbox', label: 'Sandboxed Filesystem', icon: '📦' },
+                { id: 'cli', label: 'CLI Developer DX', icon: '💻' },
+                { id: 'trading', label: 'Paper Trading Engine', icon: '📈' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`flex items-center gap-2 px-5 py-2 rounded-lg font-mono text-xs font-semibold transition-all duration-300 ${activeTab === tab.id
+                      ? 'bg-[rgba(46,242,142,0.12)] border border-[rgba(46,242,142,0.24)] text-[var(--color-green-strong)] shadow-[0_10px_24px_rgba(46,242,142,0.06)]'
+                      : 'border border-transparent text-gray-400 hover:text-gray-200 hover:bg-white/[0.02]'
+                    }`}
+                >
+                  <span>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Tab 1: Soroban Contracts */}
@@ -364,7 +464,7 @@ export default function HomePage() {
               className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
             >
               <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker border-purple-500/20 bg-purple-950/10 text-purple-400">Soroban Contract Core</div>
+                <div className="page-kicker text-sm text-gray-400">Soroban Contract Core</div>
                 <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
                   Decentralized governance of agent life cycles.
                 </h3>
@@ -372,23 +472,24 @@ export default function HomePage() {
                   Three native smart contracts manage registration, security assertions, token billing, and spend restrictions directly on the Stellar ledger.
                 </p>
 
-                <div className="space-y-4">
-                  {FEATURE_SPEC.map((spec) => (
-                    <div key={spec.title} className="group relative p-5 rounded-2xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/10 transition-all duration-300 overflow-hidden">
-                      {/* Subtle glow behind the card on hover */}
-                      <div 
-                        className="absolute -inset-1 opacity-0 group-hover:opacity-15 transition-opacity duration-700 blur-2xl z-0 pointer-events-none" 
-                        style={{ backgroundColor: spec.color }} 
-                      />
-                      
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {FEATURE_SPEC.map((spec, idx) => (
+                    <div
+                      key={spec.title}
+                      ref={(el) => void (showcaseFeatureRefs.current[idx] = el)}
+                      onMouseEnter={() => animateGlassCard(showcaseFeatureRefs.current[idx], true)}
+                      onMouseLeave={() => animateGlassCard(showcaseFeatureRefs.current[idx], false)}
+                      className="relative rounded-[1rem] p-5 border border-white bg-[rgba(255,255,255,0.03)] backdrop-blur-[6px] shadow-md hover:shadow-xl transition-shadow duration-400 overflow-hidden"
+                    >
+                      <div className="absolute -inset-1 opacity-0 group-hover:opacity-20 transition-opacity duration-700 blur-2xl z-0 pointer-events-none" style={{ backgroundColor: spec.color }} />
                       <div className="relative z-10 flex gap-4 items-start">
-                        <div className="mt-1 shrink-0 p-2 rounded-lg bg-[#0b0b11] border border-white/5 shadow-inner">
-                          <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor]" style={{ backgroundColor: spec.color, color: spec.color }} />
+                        <div className="mt-1 shrink-0 p-3 rounded-lg bg-[#0b0b11]/60 border border-white/5 shadow-inner flex items-center justify-center w-14 h-14">
+                          <div className="w-8 h-8 rounded-full" style={{ backgroundColor: spec.color }} />
                         </div>
                         <div>
                           <h4 className="text-[15px] font-bold text-white mb-1 tracking-wide">{spec.title}</h4>
                           <span className="text-[10px] font-mono text-gray-500 block mb-2 uppercase tracking-widest" style={{ color: spec.color }}>{spec.subtitle}</span>
-                          <p className="text-xs text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{spec.description}</p>
+                          <p className="text-xs text-gray-400 leading-relaxed transition-colors">{spec.description}</p>
                         </div>
                       </div>
                     </div>
@@ -397,7 +498,7 @@ export default function HomePage() {
               </div>
 
               {/* Execution State Interactive Widget */}
-              <div className="page-panel p-6 sm:p-8 flex flex-col justify-between border-white/10 bg-[#08080f]/70 relative overflow-hidden group">
+              <div ref={showcaseMonitorRef} className="page-panel p-6 sm:p-8 flex flex-col justify-between border-white/10 bg-[#08080f]/70 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[var(--color-green-strong)] opacity-[0.02] blur-[80px] pointer-events-none group-hover:opacity-[0.04] transition-opacity duration-700" />
                 <div className="relative z-10">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -424,13 +525,16 @@ export default function HomePage() {
                       const isActive = activeStep === step.id;
                       return (
                         <button
-                          key={step.id}
-                          onClick={() => setActiveStep(step.id as typeof activeStep)}
-                          className={`relative z-10 p-4 rounded-xl border text-left transition-all duration-300 ${isActive
+                            key={step.id}
+                            data-role="monitor"
+                            onClick={() => setActiveStep(step.id as typeof activeStep)}
+                            onMouseEnter={(e) => animateGlassCard(e.currentTarget as HTMLElement, true)}
+                            onMouseLeave={(e) => animateGlassCard(e.currentTarget as HTMLElement, false)}
+                            className={`relative z-10 p-4 rounded-xl border text-left transition-all duration-300 ${isActive
                               ? 'border-[var(--color-green-strong)] bg-gradient-to-br from-[rgba(46,242,142,0.08)] to-transparent shadow-[0_0_20px_rgba(46,242,142,0.05)]'
                               : 'border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]'
                             }`}
-                        >
+                          >
                           <div className="flex items-center justify-between mb-2">
                             <span className={`font-mono text-[10px] font-bold ${isActive ? 'text-[var(--color-green-strong)]' : 'text-gray-600'}`}>
                               0{idx + 1}
@@ -483,7 +587,7 @@ export default function HomePage() {
               className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
             >
               <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker border-[#00FFE5]/20 bg-teal-950/10 text-[#00FFE5]">Sandbox Isolation</div>
+                <div className="page-kicker text-sm text-gray-400">Sandbox Isolation</div>
                 <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
                   Strictly sandboxed agent environments.
                 </h3>
@@ -510,7 +614,7 @@ export default function HomePage() {
                           }`}
                       >
                         {/* Glow effect on select/hover */}
-                        <div className={`absolute inset-0 bg-gradient-to-r from-[#00FFE5] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} pointer-events-none />
+                        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-r from-[#00FFE5] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} />
                         
                         <div className="relative z-10">
                           <div className={`font-mono text-xs font-bold transition-colors ${isSelected ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>
@@ -621,7 +725,7 @@ export default function HomePage() {
 
               {/* Developer Command Selector */}
               <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker border-emerald-500/20 bg-emerald-950/10 text-emerald-400">Developer DX</div>
+                <div className="page-kicker text-sm text-gray-400">Developer DX</div>
                 <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
                   CLI-first agent orchestration.
                 </h3>
@@ -676,7 +780,7 @@ export default function HomePage() {
               className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
             >
               <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker border-amber-500/20 bg-amber-950/10 text-amber-400">Risk Simulation Engine</div>
+                <div className="page-kicker text-sm text-gray-400">Risk Simulation Engine</div>
                 <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
                   Paper trade risk-free before deploying.
                 </h3>
@@ -819,80 +923,201 @@ export default function HomePage() {
 
       </section>
 
-      {/* ── CRYPTOGRAPHIC AUDIT AND VERIFIER SECTION ───────────────────────── */}
-      <section className="py-20 px-4 max-w-7xl mx-auto border-t border-white/5 relative">
-        <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] rounded-full bg-[radial-gradient(circle,rgba(123,97,255,0.05)_0%,transparent_60%)] blur-[90px] pointer-events-none" />
+      {/* ── ABOUT AGENTFORGE VIDEO SECTION ────────────────────────────── */}
+      <section className="py-24 px-6 lg:px-12 xl:px-20 w-full max-w-[1600px] mx-auto relative border-t border-white/5">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.03)_0%,transparent_60%)] blur-[80px] pointer-events-none" />
+        
+        <div className="text-center mb-16 relative z-10">
+          <h2 className="font-syne text-3xl md:text-4xl font-semibold text-white mb-4">
+            About AgentForge
+          </h2>
+          <p className="text-[#8b8b93] text-[14px] md:text-[15px] max-w-2xl mx-auto">
+            Discover how we are reshaping the future of decentralized AI execution with sandboxed environments and Stellar-native settlement.
+          </p>
+        </div>
 
-        <div className="grid gap-12 lg:grid-cols-2 items-center">
-
-          <div className="space-y-6">
-            <div className="page-kicker border-purple-500/20 bg-purple-950/10 text-purple-400">Zero-Trust Audit Framework</div>
-            <h2 className="font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Cryptographically verified decision trails.
-            </h2>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-              Every workflow compilation, container initialization, transaction invocation, and paper trade logs a secure cryptographic fingerprint. These fingerprints are signed by the **Agent Validator** contract on Stellar to construct a tamper-proof auditing log.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="page-panel-soft p-5 border-white/5 bg-[#0b0b11]">
-                <div className="text-3xl mb-3">🛡️</div>
-                <h4 className="font-bold text-white text-sm mb-1.5">PRoot Container Seal</h4>
-                <p className="text-xs text-gray-400">Runtimes generate verification hashes upon spinup to seal container filesystem authenticity.</p>
-              </div>
-              <div className="page-panel-soft p-5 border-white/5 bg-[#0b0b11]">
-                <div className="text-3xl mb-3">🔗</div>
-                <h4 className="font-bold text-white text-sm mb-1.5">DAG Compilation Hash</h4>
-                <p className="text-xs text-gray-400">Workflow files compile into an immutable execution graph to prevent dynamic pipeline hijacking.</p>
-              </div>
+        <div className="flex flex-col gap-6 lg:gap-8 relative z-10">
+          {/* Top Row: Video + 2 Side Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Video Player */}
+            <div className="lg:col-span-2 rounded-[1rem] overflow-hidden border border-white/5 shadow-xl bg-[#050508] relative aspect-video self-start group">
+              <iframe 
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/3Vh_In2wXic?si=O71bpCFLjf8YSCbE" 
+                title="AgentForge Introduction" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              />
             </div>
 
-            <button
-              onClick={handleVerifyAudit}
-              disabled={auditHashes.verifying}
-              className={`px-6 py-3.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-3 ${auditHashes.validated
-                  ? 'border border-emerald-500/30 bg-emerald-950/10 text-emerald-400'
-                  : 'bg-[#7b61ff] hover:bg-[#6348f2] text-white'
-                }`}
-            >
-              <span>{auditHashes.verifying ? '🔄' : auditHashes.validated ? '✔' : '🔍'}</span>
-              <span>{auditHashes.verifying ? 'Computing verification proofs...' : auditHashes.validated ? 'Stellar Ledger Verified!' : 'Run Verification Audit'}</span>
-            </button>
+            {/* Side Cards */}
+            <div className="flex flex-col gap-5">
+              <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors flex-1 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded bg-[rgba(0,255,229,0.06)] flex items-center justify-center border border-[#00FFE5]/10 shrink-0">
+                    <svg className="w-4 h-4 text-[#00FFE5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <h3 className="text-white text-[15px] font-medium tracking-wide">Decentralized Orchestration</h3>
+                </div>
+                <p className="text-[#8b8b93] text-[13px] leading-[1.6]">
+                  Design workflows that integrate multiple specialized agents. Pass context seamlessly across execution layers with absolute determinism.
+                </p>
+              </div>
+
+              <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors flex-1 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded bg-[rgba(0,255,229,0.06)] flex items-center justify-center border border-[#00FFE5]/10 shrink-0">
+                    <svg className="w-4 h-4 text-[#00FFE5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-white text-[15px] font-medium tracking-wide">Stellar-Native Settlement</h3>
+                </div>
+                <p className="text-[#8b8b93] text-[13px] leading-[1.6]">
+                  Every agent gets a programmable wallet. Settle execution fees, invoke smart contracts, and stream payments instantly via the Stellar network.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Row: 3 Feature Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded bg-[rgba(0,255,229,0.06)] flex items-center justify-center border border-[#00FFE5]/10 shrink-0">
+                  <svg className="w-4 h-4 text-[#00FFE5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h3 className="text-white text-[15px] font-medium tracking-wide">Strict PRoot Sandboxing</h3>
+              </div>
+              <p className="text-[#8b8b93] text-[13px] leading-[1.6]">
+                Run untrusted code securely. Our PRoot sandboxes provide strict filesystem isolation and precise resource bounding for every workflow.
+              </p>
+            </div>
+
+            <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded bg-[rgba(0,255,229,0.06)] flex items-center justify-center border border-[#00FFE5]/10 shrink-0">
+                  <svg className="w-4 h-4 text-[#00FFE5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <h3 className="text-white text-[15px] font-medium tracking-wide">Immutable Audit Trails</h3>
+              </div>
+              <p className="text-[#8b8b93] text-[13px] leading-[1.6]">
+                Track execution hashes in real-time. Every decision and API call is cryptographically signed and anchored to the ledger.
+              </p>
+            </div>
+
+            <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded bg-[rgba(0,255,229,0.06)] flex items-center justify-center border border-[#00FFE5]/10 shrink-0">
+                  <svg className="w-4 h-4 text-[#00FFE5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-white text-[15px] font-medium tracking-wide">Token-Based Billing</h3>
+              </div>
+              <p className="text-[#8b8b93] text-[13px] leading-[1.6]">
+                Monetize your agentic workflows effortlessly. Setup custom pricing tiers and automated billing cycles powered by Soroban smart contracts.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CRYPTOGRAPHIC AUDIT AND VERIFIER SECTION ───────────────────────── */}
+      <section className="py-24 px-6 lg:px-12 xl:px-20 w-full max-w-[1600px] mx-auto border-t border-white/5 relative">
+        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.03)_0%,transparent_60%)] blur-[100px] pointer-events-none" />
+
+        <div className="grid gap-12 lg:grid-cols-2 items-center relative z-10">
+
+          <div className="space-y-8">
+            <div>
+              <div className="inline-block px-3 py-1 mb-4 rounded-full border border-white/10 bg-white/5 text-[11px] font-mono tracking-widest text-[#00D0B6] uppercase">
+                Zero-Trust Audit Framework
+              </div>
+              <h2 className="font-syne text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-[1.1]">
+                Cryptographically verified decision trails.
+              </h2>
+              <p className="mt-5 text-[#8b8b93] text-[14px] md:text-[15px] leading-[1.6] max-w-lg">
+                Every workflow compilation, container initialization, transaction invocation, and paper trade logs a secure cryptographic fingerprint. These fingerprints are signed by the <strong className="text-white font-medium">Agent Validator</strong> contract on Stellar to construct a tamper-proof auditing log.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors flex flex-col justify-center group">
+                <div className="w-10 h-10 rounded-lg bg-[rgba(0,208,182,0.06)] flex items-center justify-center border border-[#00D0B6]/10 shrink-0 mb-4 group-hover:bg-[rgba(0,208,182,0.1)] transition-colors">
+                  <svg className="w-5 h-5 text-[#00D0B6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h4 className="text-white font-medium text-[15px] mb-2">PRoot Container Seal</h4>
+                <p className="text-[#8b8b93] text-[13px] leading-[1.6]">Runtimes generate verification hashes upon spinup to seal container filesystem authenticity.</p>
+              </div>
+              <div className="p-6 border border-white/5 bg-[#0b0b11]/60 rounded-[1rem] hover:bg-white/[0.02] transition-colors flex flex-col justify-center group">
+                <div className="w-10 h-10 rounded-lg bg-[rgba(0,208,182,0.06)] flex items-center justify-center border border-[#00D0B6]/10 shrink-0 mb-4 group-hover:bg-[rgba(0,208,182,0.1)] transition-colors">
+                  <svg className="w-5 h-5 text-[#00D0B6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </div>
+                <h4 className="text-white font-medium text-[15px] mb-2">DAG Compilation Hash</h4>
+                <p className="text-[#8b8b93] text-[13px] leading-[1.6]">Workflow files compile into an immutable execution graph to prevent dynamic pipeline hijacking.</p>
+              </div>
+            </div>
           </div>
 
           {/* Hashing Terminal Visual Widget */}
-          <div className="page-panel p-6 sm:p-8 border-white/10 bg-[#08080f]/80 font-mono text-[11px] leading-relaxed text-gray-400">
-            <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-6">
-              <span className="text-[10px] text-gray-500">AUDIT PROOF GENERATOR</span>
-              <span className="px-2 py-0.5 rounded border border-white/10 bg-white/5 text-[9px] text-gray-300 uppercase tracking-widest font-bold">
+          <div className="rounded-[1.25rem] border border-white/5 bg-[#050508] shadow-2xl overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+            
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 relative z-10 bg-[#08080c]">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[#00D0B6] animate-pulse shadow-[0_0_8px_rgba(0,208,182,0.8)]" />
+                <span className="text-[11px] font-mono text-gray-400 tracking-widest uppercase">Audit Proof Generator</span>
+              </div>
+              <span className="px-3 py-1 rounded-md bg-[#00D0B6]/10 border border-[#00D0B6]/20 text-[10px] text-[#00D0B6] font-mono tracking-widest font-bold">
                 SECURE SHA-256
               </span>
             </div>
 
-            <div className="space-y-4">
+            {/* List */}
+            <div className="p-6 relative z-10 flex flex-col gap-5">
               {[
                 { label: 'EXECUTION HASH', value: auditHashes.execution, desc: 'Logs isolated sandboxed inputs/outputs' },
                 { label: 'RUNTIME HASH', value: auditHashes.runtime, desc: 'Calculates PRoot filesystem integrity check' },
                 { label: 'WORKFLOW HASH', value: auditHashes.workflow, desc: 'Seals YAML dependency DAG integrity' },
                 { label: 'AGENT HASH', value: auditHashes.agent, desc: 'Identifies registry contract profile' }
               ].map((hash) => (
-                <div key={hash.label} className="p-3.5 rounded-xl border border-white/5 bg-black/40">
-                  <div className="flex items-center justify-between text-[10px] mb-1">
-                    <span className="font-bold text-white">{hash.label}</span>
-                    <span className="text-gray-600 font-mono text-[9px]">{hash.desc}</span>
+                <div key={hash.label} className="relative group">
+                  <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-1 xl:gap-4 mb-2">
+                    <span className="font-mono text-[12px] font-bold text-white tracking-wider">{hash.label}</span>
+                    <span className="font-sans text-[12px] text-[#8b8b93]">{hash.desc}</span>
                   </div>
-                  <div className="text-[10px] font-mono text-[#00FFE5] truncate tracking-wider">{hash.value}</div>
+                  <div className="font-mono text-[12px] md:text-[13px] text-[#00D0B6] truncate tracking-widest bg-white/[0.02] p-3 rounded-lg border border-white/5 group-hover:bg-[#00D0B6]/5 group-hover:border-[#00D0B6]/20 transition-colors cursor-default">
+                    {hash.value}
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/5 flex items-start gap-3">
-              <span className="text-lg">🛡️</span>
-              <div className="space-y-1">
-                <span className="font-bold text-white text-xs block">Verifiable On-Chain Checksums</span>
-                <span className="text-[10px] text-gray-400 leading-normal block">
-                  Clicking the validation triggers a Soroban cryptographic verification audit request that matches local outputs against the deployed `AgentValidator` contract on Stellar mainnet.
-                </span>
+            {/* Footer */}
+            <div className="px-6 py-5 border-t border-white/5 bg-[#08080c] relative z-10 flex items-start gap-4">
+              <div className="w-8 h-8 rounded bg-[rgba(0,208,182,0.06)] flex items-center justify-center border border-[#00D0B6]/10 shrink-0 mt-1">
+                <svg className="w-4 h-4 text-[#00D0B6]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="text-white text-[14px] font-medium tracking-wide mb-1.5">Verifiable On-Chain Checksums</h4>
+                <p className="text-[#8b8b93] text-[12px] leading-relaxed">
+                  Cryptographic verification audit matches local outputs against the deployed <code className="font-mono text-[11px] text-[#00D0B6] bg-[#00D0B6]/10 px-1.5 py-0.5 rounded ml-0.5">AgentValidator</code> contract on Stellar mainnet.
+                </p>
               </div>
             </div>
           </div>
@@ -919,7 +1144,8 @@ export default function HomePage() {
             { src: '/CRUD%20pipeline.png', name: 'CRUD Pipeline', isLarge: false },
             { src: '/Gpu%20pipeline.png', name: 'GPU Pipeline', isLarge: false },
             { src: '/T54%20trust%20layer%20pipeline.png', name: 'T54 Trust Layer Pipeline', isLarge: false },
-            { src: '/dev%20toolkit%20pipeline.png', name: 'Dev Toolkit Pipeline', isLarge: false, isCentered: true }
+            { src: '/dev%20toolkit%20pipeline.png', name: 'Dev Toolkit Pipeline', isLarge: false },
+            { src: '/Execution%20Pipeline.png', name: 'Execution Pipeline', isLarge: false }
           ].map((diagram, idx) => (
             <motion.div
               key={idx}
@@ -928,17 +1154,17 @@ export default function HomePage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => setExpandedImage(diagram.src)}
-              className={`page-panel group border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer ${diagram.isLarge ? 'md:col-span-2 max-w-4xl mx-auto w-full' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
+              className={`page-panel group border border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer h-full ${diagram.isLarge ? 'md:col-span-2 max-w-4xl mx-auto w-full' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
             >
-              <div className="relative w-full bg-black/40 p-8 sm:p-12 flex items-center justify-center">
+              <div className="relative w-full flex-1 min-h-[250px] bg-black/40 p-8 sm:p-12 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={diagram.src} 
                   alt={diagram.name}
-                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] opacity-85 group-hover:opacity-100"
+                  className="w-full h-full max-h-[300px] object-contain transition-transform duration-500 group-hover:scale-[1.02] opacity-85 group-hover:opacity-100"
                 />
               </div>
-              <div className="p-6 border-t border-white/5 bg-black/20 flex items-center justify-between">
+              <div className="p-6 border-t border-white/5 bg-black/20 flex items-center justify-between mt-auto shrink-0">
                 <h3 className="font-mono text-base md:text-lg font-bold text-white tracking-wider">{diagram.name}</h3>
                 <span className="text-[var(--color-green-strong)] opacity-0 group-hover:opacity-100 transition-opacity font-mono text-2xl">↗</span>
               </div>
@@ -948,21 +1174,29 @@ export default function HomePage() {
       </section>
 
       {/* ── FOOTER CORE VISION BANNER ────────────────────────────────────────── */}
-      <section className="py-24 px-4 max-w-7xl mx-auto border-t border-white/5 text-center relative overflow-hidden">
-        {/* Subtle grid lines background overlay */}
-        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full bg-[radial-gradient(circle,rgba(123,97,255,0.06)_0%,transparent_70%)] blur-[90px] pointer-events-none" />
+      <section className="py-32 px-4 w-full border-t border-white/5 text-center relative overflow-hidden flex flex-col justify-center min-h-[500px]">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90 pointer-events-none"
+          style={{ backgroundImage: 'url("/bg1.1.png")' }}
+        />
+        
+        {/* Gradient fades to blend seamlessly into the site background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508] pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-          <div className="page-kicker">Core System Architecture</div>
-          <h2 className="font-syne text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Designed for modularity. Evolving for decentralization.
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+          <div className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#00D0B6] mb-6">
+            Core System Architecture
+          </div>
+          <h2 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15] mb-6">
+            Designed for modularity.<br />
+            Evolving for decentralization.
           </h2>
-          <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
-            AgentForge starts centralized for rapid iteration, but its components are completely modular. Future upgrades will support remote runners, zero-knowledge proofs of execution, decentralized nodes, staking, and SLA slashing policies.
+          <p className="text-[#8b8b93] text-sm md:text-[15px] leading-relaxed max-w-3xl mx-auto mb-10">
+            AgentForge starts centralized for rapid iteration, but its components are completely modular.<br className="hidden md:block"/> Future upgrades will support remote runners, zero-knowledge proofs of execution,<br className="hidden md:block"/> decentralized nodes, staking, and SLA slashing policies.
           </p>
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/docs" className="cta-secondary text-xs px-6 py-3.5 rounded-xl font-bold uppercase tracking-wider text-gray-300 hover:text-white">
+          <div className="flex items-center justify-center">
+            <Link href="/docs" className="bg-[#0b0b11]/80 hover:bg-[#00D0B6]/10 border border-white/10 hover:border-[#00D0B6]/40 backdrop-blur-md transition-all text-[11px] px-8 py-3.5 rounded-full font-bold uppercase tracking-wider text-white hover:text-[#00D0B6]">
               Read Documentation
             </Link>
           </div>

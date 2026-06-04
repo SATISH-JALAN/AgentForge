@@ -149,10 +149,6 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(46,242,142,0.16);
-  background: rgba(46,242,142,0.06);
   color: rgba(46,242,142,0.95);
   font-size: 11px;
   font-weight: 700;
@@ -246,6 +242,28 @@ body {
 @keyframes shimmer {
   0%   { background-position: -400px 0; }
   100% { background-position: 400px 0; }
+}
+
+@keyframes type-stellar {
+  0%, 15% { width: 0; }
+  40%, 60% { width: 100%; }
+  85%, 100% { width: 0; }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: var(--color-green-strong); }
+}
+
+.typewriter-text {
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.08em solid var(--color-green-strong);
+  padding-right: 2px;
+  animation: 
+    type-stellar 6s steps(8, end) infinite,
+    blink-cursor 0.8s step-end infinite;
 }
 
 .skeleton {
