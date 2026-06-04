@@ -314,15 +314,21 @@ export default function HomePage() {
 
       {/* ── INTERACTIVE CORE SPECIFICATION SHOWCASE ──────────────────────────── */}
       <section className="py-20 px-4 bg-[#050508]/90 max-w-full">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="page-kicker">Platform Specification</div>
-          <h2 className="mt-4 font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            Architecture built for ironclad orchestration.
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.55 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+          className="text-center max-w-5xl mx-auto mb-16"
+        >
+          <h2 className="mx-auto inline-flex flex-col items-center font-serif text-[clamp(2.9rem,7vw,6.2rem)] font-semibold leading-[0.9] tracking-[-0.08em] text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]">
+            <span className="block whitespace-nowrap">Architecture built for</span>
+            <span className="block whitespace-nowrap">ironclad orchestration.</span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-gray-400">
+          <p className="mx-auto mt-5 max-w-2xl text-sm sm:text-base leading-[1.7] text-gray-400">
             Every layer from contracts to execution runtimes is decoupled, isolated, and auditable. Switch between architectural layers below.
           </p>
-        </div>
+        </motion.div>
 
         {/* Dynamic Selector Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-[#0b0b11] border border-white/5 rounded-2xl max-w-3xl mx-auto mb-12">
