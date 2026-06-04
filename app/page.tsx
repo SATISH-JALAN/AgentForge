@@ -233,81 +233,81 @@ export default function HomePage() {
     <div className="page-theme min-h-screen overflow-x-hidden text-white font-sans">
 
       {/* ── HERO SECTION ──────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-24 px-4 bg-black overflow-hidden border-b border-white/5">
-        {/* Subtle grid lines background overlay */}
-        <div className="absolute inset-0 grid-bg opacity-[0.12] pointer-events-none" />
-
-        {/* Glowing backdrop spotlights for 3D depth */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(46,242,142,0.08)_0%,transparent_70%)] blur-[140px] pointer-events-none z-0" />
-        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.04)_0%,transparent_70%)] blur-[120px] pointer-events-none z-0" />
-        <div className="absolute top-1/2 right-1/4 translate-x-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(123,97,255,0.04)_0%,transparent_70%)] blur-[120px] pointer-events-none z-0" />
-
-        {/* 3D Emergent Hands Background (Inverted to glow white on pitch black) */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-30 select-none flex items-center justify-center">
+      <section className="relative isolate flex min-h-[calc(100svh-4rem)] items-center overflow-hidden border-b border-white/5 bg-[#050508] px-4 py-6 sm:py-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(46,242,142,0.12),transparent_22%),radial-gradient(circle_at_20%_18%,rgba(0,255,229,0.05),transparent_18%),radial-gradient(circle_at_80%_14%,rgba(123,97,255,0.04),transparent_20%)]" />
+        <div className="absolute inset-0 opacity-[0.18] pointer-events-none [background-image:radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:8px_8px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.95),transparent_88%)]" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <Image
             src="/hands_creation.png"
             alt="Emergent 3D Hands Silhouette"
             fill
-            className="object-cover object-center invert brightness-[1.25] contrast-[1.25]"
+            className="object-cover object-center invert brightness-[0.98] contrast-[1.02] opacity-22 scale-[1.06] blur-[1.5px] sm:blur-[2px]"
             priority
           />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(5,5,8,0.14)_0%,rgba(5,5,8,0.5)_50%,rgba(5,5,8,0.94)_92%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050508]" />
         </div>
 
-        {/* Strong black fade overlay at the bottom to blend seamlessly */}
-        <div className="absolute bottom-0 left-0 w-full h-[60%] bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-[5]" />
+        <div className="relative z-10 page-shell w-full py-0">
+          <div className="mx-auto max-w-4xl text-center select-text">
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.12 }}
+              className="flex flex-col items-center font-serif text-[clamp(2.9rem,7vw,6.2rem)] font-semibold leading-none tracking-[-0.08em] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.72)]"
+            >
+              <span className="block text-white leading-none">Agentic OS.</span>
+              <span className="mt-[0.04em] block text-white leading-none">
+                Built on{' '}
+                <span className="bg-gradient-to-r from-white to-[var(--color-green-strong)] bg-clip-text text-transparent">
+                  Stellar.
+                </span>
+              </span>
+            </motion.h1>
 
-        {/* Centered Hero Content layered on top of the hands background */}
-        <div className="relative z-10 text-center max-w-5xl mx-auto space-y-8 select-text">
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.22 }}
+              className="mx-auto mt-4 max-w-2xl text-balance font-sans text-[13px] font-medium leading-[1.72] tracking-[-0.01em] text-white/72 sm:text-[14px] md:text-[15px]"
+            >
+              Build portable, PRoot-sandboxed agents with deterministic workflows, secure Stellar wallets, programmable payments, and auditable Soroban runtimes.
+            </motion.p>
+          </div>
 
-          {/* Bold Serif Headline, superimposed directly on the fingertips touching in the center */}
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-serif text-[46px] sm:text-[66px] lg:text-[84px] font-medium leading-[1.04] tracking-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]"
-          >
-            Agentic OS. <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-green-strong)] via-[#00FFE5] to-[#7b61ff]">
-              Built On Stellar.
-            </span>
-          </motion.h1>
-
-          {/* Subtext in clean sans-serif */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="font-sans text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 max-w-3xl mx-auto font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-          >
-            Build portable, PRoot-sandboxed, monetizable agents with deterministic DAG workflows, secure agent-owned Stellar wallets, programmable payments, and cryptographically auditable runtimes on Soroban.
-          </motion.p>
-
-
-
-          {/* Status Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-emerald-500/20 bg-emerald-950/20 backdrop-blur-md w-fit mx-auto font-mono text-[9px] tracking-widest text-emerald-400 uppercase animate-pulse"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            Soroban SDK Active
-          </motion.div>
-        </div>
-
-        {/* Brand/Integration Marquee directly modeled after Nexora mockup */}
-        <div className="relative z-10 mt-20 pt-8 border-t border-white/5 text-center">
-          <p className="font-mono text-[10px] sm:text-xs text-gray-500 uppercase tracking-[0.24em] mb-6">
-            Powering autonomous workflows across the Stellar ecosystem
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-y-3 gap-x-8 sm:gap-x-14 opacity-40 grayscale hover:opacity-85 hover:grayscale-0 transition-all duration-500 text-sm font-semibold tracking-wider font-mono text-white/80">
-            <span className="hover:text-[var(--color-green-strong)] transition-colors">SOROSWAP</span>
-            <span className="hover:text-[#00FFE5] transition-colors">BLEND POOLS</span>
-            <span className="hover:text-[#7b61ff] transition-colors">AQUARIUS DEX</span>
-            <span className="hover:text-amber-400 transition-colors">PHOENIX FI</span>
-            <span className="hover:text-cyan-400 transition-colors">STELLAR CORE</span>
-            <span className="hover:text-pink-400 transition-colors">0x402 ROUTER</span>
+          <div className="absolute inset-x-0 bottom-2 sm:bottom-3">
+            <div className="relative mx-auto max-w-[100vw] overflow-hidden px-0">
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#050508] to-transparent sm:w-32" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#050508] to-transparent sm:w-32" />
+              <div className="flex w-[200%] marquee-track items-center will-change-transform">
+                <div className="flex w-1/2 items-center justify-around gap-8 whitespace-nowrap px-6 font-serif text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-white/60 sm:text-[0.78rem]">
+                  <span className="text-white/45">SOROSWAP</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/70">BLEND POOLS</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/50">AQUARIUS DEX</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/65">PHOENIX FI</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/55">STELLAR CORE</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/70">0x402 ROUTER</span>
+                </div>
+                <div className="flex w-1/2 items-center justify-around gap-8 whitespace-nowrap px-6 font-serif text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-white/60 sm:text-[0.78rem]">
+                  <span className="text-white/45">SOROSWAP</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/70">BLEND POOLS</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/50">AQUARIUS DEX</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/65">PHOENIX FI</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/55">STELLAR CORE</span>
+                  <span className="h-px w-10 bg-white/12" />
+                  <span className="text-white/70">0x402 ROUTER</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -407,8 +407,7 @@ export default function HomePage() {
                   </p>
 
                   <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                    {/* Pipeline connecting line */}
-                    <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-white/5 -translate-y-1/2 hidden md:block z-0" />
+                    {/* Pipeline connecting line removed per request (no divider between cards) */}
 
                     {[
                       { id: 'PENDING', desc: 'Verifying keys & AF gas tokens' },
