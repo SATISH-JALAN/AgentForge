@@ -1031,10 +1031,19 @@ export default function HomePage() {
       </section>
 
       {/* ── CRYPTOGRAPHIC AUDIT AND VERIFIER SECTION ───────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 xl:px-20 w-full max-w-[1600px] mx-auto border-t border-white/5 relative">
-        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.03)_0%,transparent_60%)] blur-[100px] pointer-events-none" />
+      <section className="py-32 w-full relative overflow-hidden flex flex-col justify-center min-h-[700px]">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-[length:100%_100%] bg-center bg-no-repeat opacity-80 blur-[8px] pointer-events-none"
+          style={{ backgroundImage: 'url("/bg1.2.png")' }}
+        />
+        
+        {/* Strong gradient fades at the edges to blend seamlessly into the site background */}
+        <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-[#050508] to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050508] to-transparent pointer-events-none" />
 
-        <div className="grid gap-12 lg:grid-cols-2 items-center relative z-10">
+        <div className="px-6 lg:px-12 xl:px-20 w-full max-w-[1500px] mx-auto relative z-10">
+          <div className="grid gap-12 xl:gap-20 lg:grid-cols-2 items-center">
 
           <div className="space-y-8">
             <div>
@@ -1123,6 +1132,7 @@ export default function HomePage() {
           </div>
 
         </div>
+        </div>
       </section>
 
       {/* ── PIPELINE DIAGRAMS SHOWCASE ────────────────────────────────────────── */}
@@ -1174,15 +1184,16 @@ export default function HomePage() {
       </section>
 
       {/* ── FOOTER CORE VISION BANNER ────────────────────────────────────────── */}
-      <section className="py-32 px-4 w-full border-t border-white/5 text-center relative overflow-hidden flex flex-col justify-center min-h-[500px]">
+      <section className="py-32 px-4 w-full text-center relative overflow-hidden flex flex-col justify-center min-h-[500px]">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90 pointer-events-none"
           style={{ backgroundImage: 'url("/bg1.1.png")' }}
         />
         
-        {/* Gradient fades to blend seamlessly into the site background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508] pointer-events-none" />
+        {/* Strong gradient fades at the edges to blend seamlessly into the site background */}
+        <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-[#050508] to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050508] to-transparent pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
           <div className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#00D0B6] mb-6">
