@@ -120,38 +120,37 @@ export default function VideoShowcaseSection() {
           <div className="absolute left-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-[var(--color-green-strong)] to-transparent" />
        </div>
 
-       {VIDEOS.map((vid, i) => (
-         <div key={vid.id} className={`absolute inset-0 flex flex-col items-center justify-center gap-6 md:gap-10 pointer-events-none p-4 md:p-8 pt-20 md:pt-32`}>
+        {VIDEOS.map((vid, i) => (
+         <div key={vid.id} className={`absolute inset-0 flex flex-col items-center justify-start pt-[100px] pb-[40px] pointer-events-none px-4 md:px-8 overflow-hidden`}>
            
            {/* Text Overlay */}
-           <div className={`text-wrapper-${i} z-20 flex flex-col items-center text-center max-w-2xl px-4 pointer-events-auto will-change-transform`}>
-              <h2 className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl">
+           <div className={`text-wrapper-${i} z-20 flex flex-col items-center text-center max-w-3xl px-4 pointer-events-auto will-change-transform shrink-0`}>
+              <h2 className="font-syne text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 drop-shadow-2xl">
                 {vid.title}
               </h2>
-              <p className="text-[#8b8b93] text-[14px] md:text-[17px] leading-[1.6] max-w-xl mx-auto drop-shadow-md">
+              <p className="text-[#8b8b93] text-[14px] md:text-[16px] leading-[1.6] max-w-xl mx-auto drop-shadow-md">
                 {vid.desc}
               </p>
            </div>
            
-           {/* Video Box */}
-           <div className={`video-wrapper-${i} z-10 w-full md:w-[70vw] max-w-[1000px] max-h-[45vh] md:max-h-[55vh] aspect-video bg-[#0a0a0f] border border-white/10 rounded-2xl shadow-[0_0_80px_rgba(0,208,182,0.1)] overflow-hidden flex flex-col items-center justify-center pointer-events-auto will-change-transform`}>
-             
-             {/* Fake browser/video header */}
-             <div className="w-full h-10 bg-[#0e0e14] border-b border-white/5 flex items-center px-4 gap-2 shrink-0">
-               <div className="w-3 h-3 rounded-full bg-white/10" />
-               <div className="w-3 h-3 rounded-full bg-white/10" />
-               <div className="w-3 h-3 rounded-full bg-white/10" />
-             </div>
+           {/* Video Container (Dynamic size to perfectly fit remaining space) */}
+           <div className="w-full flex-1 flex justify-center items-center min-h-0 mt-6 md:mt-8 pointer-events-none">
+             <div className={`video-wrapper-${i} z-10 w-full max-w-[1200px] h-auto max-h-full aspect-video bg-[#0a0a0f] border border-white/10 rounded-2xl shadow-[0_0_80px_rgba(0,208,182,0.1)] overflow-hidden flex flex-col pointer-events-auto will-change-transform shrink-0`}>
+              
+              {/* Fake browser/video header */}
+              <div className="w-full h-8 md:h-10 bg-[#0e0e14] border-b border-white/5 flex items-center px-4 gap-2 shrink-0">
+                <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+              </div>
 
-             {/* Placeholder Content */}
-             <div className="flex-1 w-full flex items-center justify-center bg-black">
-                <div className="text-[var(--color-green-strong)] font-mono text-xl md:text-3xl tracking-[0.2em] opacity-40 uppercase">
-                    VIDEO PLAYING...
-                </div>
-                {/* 
-                  When you have the video, replace the above div with your video tag:
-                  <video src="/path-to-video.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
-                */}
+              {/* Placeholder Content */}
+              <div className="flex-1 w-full flex items-center justify-center bg-black">
+                 <div className="text-[var(--color-green-strong)] font-mono text-lg md:text-2xl tracking-[0.2em] opacity-40 uppercase">
+                     VIDEO PLAYING...
+                 </div>
+              </div>
+
              </div>
            </div>
 
