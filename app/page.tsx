@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import Link from 'next/link';
 import Image from 'next/image';
+import CliShowcaseSection from '../components/CliShowcaseSection';
 
 // Features for the outline
 const FEATURE_SPEC = [
@@ -924,13 +925,14 @@ export default function HomePage() {
       </section>
 
       {/* ── ABOUT AGENTFORGE VIDEO SECTION ────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 xl:px-20 w-full max-w-[1600px] mx-auto relative border-t border-white/5">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.03)_0%,transparent_60%)] blur-[80px] pointer-events-none" />
-        
-        <div className="text-center mb-16 relative z-10">
-          <h2 className="font-syne text-3xl md:text-4xl font-semibold text-white mb-4">
-            About AgentForge
-          </h2>
+      <section className="py-24 px-6 lg:px-12 xl:px-20 w-full bg-[#050508] relative border-t border-white/5">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,255,229,0.03)_0%,transparent_60%)] blur-[80px] pointer-events-none" />
+          
+          <div className="text-center mb-16 relative z-10">
+            <h2 className="font-syne text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
+              About AgentForge
+            </h2>
           <p className="text-[#8b8b93] text-[14px] md:text-[15px] max-w-2xl mx-auto">
             Discover how we are reshaping the future of decentralized AI execution with sandboxed environments and Stellar-native settlement.
           </p>
@@ -1027,6 +1029,7 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
@@ -1182,6 +1185,9 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ── CLI SHOWCASE SECTION ────────────────────────────────────────────── */}
+      <CliShowcaseSection />
 
       {/* ── FOOTER CORE VISION BANNER ────────────────────────────────────────── */}
       <section className="py-32 px-4 w-full text-center relative overflow-hidden flex flex-col justify-center min-h-[500px]">
