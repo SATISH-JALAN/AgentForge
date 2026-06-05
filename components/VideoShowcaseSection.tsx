@@ -121,7 +121,7 @@ export default function VideoShowcaseSection() {
        </div>
 
        {VIDEOS.map((vid, i) => (
-         <div key={vid.id} className={`absolute inset-0 flex flex-col items-center justify-center gap-8 md:gap-10 pointer-events-none p-4 md:p-8`}>
+         <div key={vid.id} className={`absolute inset-0 flex flex-col items-center justify-center gap-6 md:gap-10 pointer-events-none p-4 md:p-8 pt-20 md:pt-32`}>
            
            {/* Text Overlay */}
            <div className={`text-wrapper-${i} z-20 flex flex-col items-center text-center max-w-2xl px-4 pointer-events-auto will-change-transform`}>
@@ -134,7 +134,7 @@ export default function VideoShowcaseSection() {
            </div>
            
            {/* Video Box */}
-           <div className={`video-wrapper-${i} z-10 w-full md:w-[70vw] max-w-[1000px] aspect-video bg-[#0a0a0f] border border-white/10 rounded-2xl shadow-[0_0_80px_rgba(0,208,182,0.1)] overflow-hidden flex flex-col items-center justify-center pointer-events-auto will-change-transform`}>
+           <div className={`video-wrapper-${i} z-10 w-full md:w-[70vw] max-w-[1000px] max-h-[45vh] md:max-h-[55vh] aspect-video bg-[#0a0a0f] border border-white/10 rounded-2xl shadow-[0_0_80px_rgba(0,208,182,0.1)] overflow-hidden flex flex-col items-center justify-center pointer-events-auto will-change-transform`}>
              
              {/* Fake browser/video header */}
              <div className="w-full h-10 bg-[#0e0e14] border-b border-white/5 flex items-center px-4 gap-2 shrink-0">
