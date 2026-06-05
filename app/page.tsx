@@ -342,7 +342,7 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 page-shell w-full py-0">
-          <div className="mx-auto max-w-4xl text-center select-text">
+          <div className="mx-auto max-w-4xl text-center select-text pb-16 md:pb-20">
             <motion.h1
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -369,10 +369,41 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.22 }}
-              className="mx-auto mt-4 max-w-2xl text-balance font-sans text-[13px] font-medium leading-[1.72] tracking-[-0.01em] text-white/72 sm:text-[14px] md:text-[15px]"
+              className="mx-auto mt-6 max-w-2xl text-balance font-sans text-[14px] font-medium leading-[1.72] tracking-[-0.01em] text-white/72 sm:text-[15px] md:text-[16px]"
             >
               Build portable, PRoot-sandboxed agents with deterministic workflows, secure Stellar wallets, programmable payments, and auditable Soroban runtimes.
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.32 }}
+              className="mt-10 flex justify-center"
+            >
+              <Link 
+                href="/dashboard" 
+                className="group relative inline-flex items-center justify-center gap-4 px-10 py-4 bg-[rgba(8,8,15,0.6)] border border-white/10 rounded-full overflow-hidden backdrop-blur-md transition-all duration-500 hover:border-[var(--color-green-strong)]/40 hover:shadow-[0_0_40px_rgba(46,242,142,0.15)] hover:scale-[1.02]"
+              >
+                {/* Sweep animation background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--color-green-strong)]/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
+                
+                {/* Subtle glow behind the button */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,rgba(46,242,142,0.1)_0%,transparent_70%)] transition-opacity duration-500" />
+                
+                <span className="relative z-10 font-mono text-[13px] font-bold tracking-[0.2em] text-white/90 group-hover:text-[var(--color-green-strong)] transition-colors duration-300 uppercase">
+                  Start Building
+                </span>
+                
+                <svg 
+                  className="relative z-10 w-4 h-4 text-white/40 group-hover:text-[var(--color-green-strong)] transition-all duration-300 group-hover:translate-x-1" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </motion.div>
           </div>
 
           <div className="absolute inset-x-0 bottom-2 sm:bottom-3">

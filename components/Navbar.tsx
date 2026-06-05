@@ -56,8 +56,8 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <Link href="#early-access" className="cta-secondary hidden sm:inline-flex transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_20px_rgba(0,255,229,0.2)] active:scale-95">
-            Early Access
+          <Link href="/dashboard" className="cta-secondary hidden sm:inline-flex transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_20px_rgba(0,255,229,0.2)] active:scale-95">
+            Open Dashboard
           </Link>
           <WalletConnect />
         </div>
