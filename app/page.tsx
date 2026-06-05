@@ -1093,6 +1093,19 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── SYSTEM ARCHITECTURE HEADLINE ──────────────────────────────────────── */}
+      <section className="w-full bg-[#050508] pt-32 pb-16 relative overflow-hidden flex flex-col items-center justify-center z-50 shadow-[0_-20px_50px_rgba(5,5,8,1)]">
+        {/* Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[var(--color-green-strong)]/10 blur-[100px] rounded-full pointer-events-none" />
+        
+        <h2 className="font-syne text-5xl md:text-7xl lg:text-[5rem] font-black text-white text-center leading-[1.1] tracking-tight drop-shadow-2xl z-10">
+          System Architecture
+        </h2>
+        <p className="text-[#8b8b93] text-[15px] md:text-lg max-w-2xl text-center mt-6 z-10 px-4">
+          Explore the internal pipeline diagrams and architectural blueprints of the AgentForge engine.
+        </p>
+      </section>
+
       {/* ── PIPELINE DIAGRAMS SHOWCASE ────────────────────────────────────────── */}
       <WorkflowShowcaseSection />
 

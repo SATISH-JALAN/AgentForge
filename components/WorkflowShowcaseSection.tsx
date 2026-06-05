@@ -156,7 +156,7 @@ export default function WorkflowShowcaseSection() {
 
   return (
     <>
-      <section ref={containerRef} className="relative w-full bg-[#050508] border-t border-white/5 py-10 md:py-0">
+      <section ref={containerRef} className="relative w-full bg-[#050508] py-10 md:py-0">
         <div className="flex flex-col md:flex-row relative w-full items-start max-w-[1600px] mx-auto">
           {/* Left Panel - Sticky */}
           <div 
@@ -164,9 +164,6 @@ export default function WorkflowShowcaseSection() {
             className="w-full md:w-[40%] md:h-[100vh] flex flex-col justify-center px-6 md:px-12 xl:px-20 py-12 md:py-0 bg-[#050508] z-10 sticky top-0 md:relative border-b border-white/5 md:border-b-0"
           >
             <div className="max-w-xl mx-auto md:mx-0">
-              <span className="inline-block px-3 py-1 mb-4 rounded-full border border-[#00D0B6]/30 bg-[#00D0B6]/10 text-[10px] font-mono tracking-widest text-[#00D0B6] uppercase">
-                System Architecture
-              </span>
               <div className="text-[13px] text-[#888] tracking-[0.1em] font-mono mb-6">
                 {String(activeIndex + 1).padStart(2, '0')} / {String(WORKFLOW_DATA.length).padStart(2, '0')}
               </div>
