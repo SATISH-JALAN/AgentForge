@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import CliShowcaseSection from '../components/CliShowcaseSection';
 import WorkflowShowcaseSection from '../components/WorkflowShowcaseSection';
+import VideoShowcaseSection from '../components/VideoShowcaseSection';
 
 // Features for the outline
 const FEATURE_SPEC = [
@@ -1118,6 +1119,9 @@ export default function HomePage() {
 
       {/* ── CLI SHOWCASE SECTION ────────────────────────────────────────────── */}
       <CliShowcaseSection />
+
+      {/* ── VIDEO SHOWCASE SECTION ──────────────────────────────────────────── */}
+      <VideoShowcaseSection />
 
       {/* ── FOOTER CORE VISION BANNER ────────────────────────────────────────── */}
       <section className="py-32 px-4 w-full text-center relative overflow-hidden flex flex-col justify-center min-h-[500px]">
