@@ -10,45 +10,45 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const CLI_DATA = [
+const WORKFLOW_DATA = [
   {
-    title: "Agent Workspace Structure",
-    description: "Initialize a local workspace with the forge init command. This creates all necessary configurations, including your agent.yaml definition.",
-    src: "/cli/Agentfolder.jpg"
+    title: "Full Workflow Pipeline",
+    description: "End-to-end execution flow of an AgentForge task, from client request to final settlement.",
+    src: "/full%20workflow.png"
   },
   {
-    title: "Sandboxed Isolation",
-    description: "Ensure secure operations inside PRoot sandboxed containers, wrapped with namespace and seccomp system-call filters.",
-    src: "/cli/agent sandboxing.jpg"
+    title: "0x402 Pipeline",
+    description: "Settlement layer handling machine-to-machine micropayments and verification on Stellar.",
+    src: "/0x402%20pipeline.png"
   },
   {
-    title: "0x402 Protocol Settlement",
-    description: "Interact with the payment router for seamless protocol execution tariffs and fee routing.",
-    src: "/cli/0x402protocol.jpg"
+    title: "CRUD Pipeline",
+    description: "High-performance persistent storage operations interacting with the AgentForge backend.",
+    src: "/CRUD%20pipeline.png"
   },
   {
-    title: "Paper Trading Balances",
-    description: "Simulate swaps on the Stellar DEX and track virtual balances without risking real capital.",
-    src: "/cli/paper trading balance for demo.jpg"
+    title: "GPU Pipeline",
+    description: "Accelerated compute allocation and orchestration for intensive on-device inference.",
+    src: "/Gpu%20pipeline.png"
   },
   {
-    title: "Paper Trade Proofs",
-    description: "Verify simulated execution hashes logged and securely bound to your agent profile.",
-    src: "/cli/paper trade proof.jpg"
+    title: "T54 Trust Layer",
+    description: "Verifiable audit trails anchoring sandbox state and hashes to the Soroban Ledger.",
+    src: "/T54%20trust%20layer%20pipeline.png"
   },
   {
-    title: "Ledger Registration",
-    description: "Deploy your compiled agent and register its signature directly to the Soroban Ledger.",
-    src: "/cli/ledger.jpg"
+    title: "Dev Toolkit Pipeline",
+    description: "Local development, scaffolding, testing, and simulation lifecycle workflows.",
+    src: "/dev%20toolkit%20pipeline.png"
   },
   {
-    title: "Live Dashboard Monitoring",
-    description: "Stream real-time sandbox logs and monitor active agent statuses through the unified console.",
-    src: "/cli/liveDasboard.jpg"
+    title: "Execution Pipeline",
+    description: "PRoot-sandboxed deterministic runtime execution loop and resource bounding.",
+    src: "/Execution%20Pipeline.png"
   }
 ];
 
-export default function CliShowcaseSection() {
+export default function WorkflowShowcaseSection() {
   const containerRef = useRef<HTMLElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
@@ -74,10 +74,10 @@ export default function CliShowcaseSection() {
         end: "bottom bottom",
         pin: leftPanelRef.current,
         pinSpacing: false, // The container itself defines the height
-        id: "cliShowcasePin"
+        id: "workflowShowcasePin"
       });
       // Animate images entering
-      const images = gsap.utils.toArray('.cli-image-container') as HTMLElement[];
+      const images = gsap.utils.toArray('.workflow-image-container') as HTMLElement[];
       
       images.forEach((img, i) => {
         // Entrance animation
@@ -144,18 +144,19 @@ export default function CliShowcaseSection() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lightboxOpen) return;
       if (e.key === 'Escape') setLightboxOpen(false);
-      if (e.key === 'ArrowRight') setLightboxIndex(prev => (prev + 1) % CLI_DATA.length);
-      if (e.key === 'ArrowLeft') setLightboxIndex(prev => (prev - 1 + CLI_DATA.length) % CLI_DATA.length);
+      if (e.key === 'ArrowRight') setLightboxIndex(prev => (prev + 1) % WORKFLOW_DATA.length);
+      if (e.key === 'ArrowLeft') setLightboxIndex(prev => (prev - 1 + WORKFLOW_DATA.length) % WORKFLOW_DATA.length);
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxOpen]);
 
-  const activeData = CLI_DATA[activeIndex] || CLI_DATA[0];
+  const activeData = WORKFLOW_DATA[activeIndex] || WORKFLOW_DATA[0];
 
   return (
     <>
-      <section ref={containerRef} className="relative w-full bg-[#050508] py-10 md:py-0">
+      <section ref={containerRef} className="relative w-full bg-[#050508] border-t border-white/5 py-10 md:py-0">
         <div className="flex flex-col md:flex-row relative w-full items-start max-w-[1600px] mx-auto">
           {/* Left Panel - Sticky */}
           <div 
@@ -163,19 +164,22 @@ export default function CliShowcaseSection() {
             className="w-full md:w-[40%] md:h-[100vh] flex flex-col justify-center px-6 md:px-12 xl:px-20 py-12 md:py-0 bg-[#050508] z-10 sticky top-0 md:relative border-b border-white/5 md:border-b-0"
           >
             <div className="max-w-xl mx-auto md:mx-0">
+              <span className="inline-block px-3 py-1 mb-4 rounded-full border border-[#00D0B6]/30 bg-[#00D0B6]/10 text-[10px] font-mono tracking-widest text-[#00D0B6] uppercase">
+                System Architecture
+              </span>
               <div className="text-[13px] text-[#888] tracking-[0.1em] font-mono mb-6">
-                {String(activeIndex + 1).padStart(2, '0')} / {String(CLI_DATA.length).padStart(2, '0')}
+                {String(activeIndex + 1).padStart(2, '0')} / {String(WORKFLOW_DATA.length).padStart(2, '0')}
               </div>
               <h2 
                 ref={titleRef} 
-                className="headline font-syne font-[800] text-white max-w-[400px] mb-5"
-                style={{ fontSize: 'clamp(40px, 5vw, 68px)', lineHeight: '1.1' }}
+                className="workflow-title font-syne font-[800] text-white max-w-[450px] mb-5"
+                style={{ fontSize: 'clamp(40px, 5vw, 64px)', lineHeight: '1.1' }}
               >
                 {activeData.title}
               </h2>
               <p 
                 ref={descRef} 
-                className="headline text-[#aaaaaa] text-[16px] md:text-[17px] leading-[1.7] max-w-[380px]"
+                className="workflow-desc text-[#aaaaaa] text-[16px] md:text-[17px] leading-[1.7] max-w-[380px]"
               >
                 {activeData.description}
               </p>
@@ -184,36 +188,34 @@ export default function CliShowcaseSection() {
 
           {/* Right Panel - Scrolling Images */}
           <div ref={rightPanelRef} className="w-full md:w-[60%] flex flex-col pb-[10vh]">
-            {CLI_DATA.map((item, i) => (
+            {WORKFLOW_DATA.map((item, i) => (
               <div 
                 key={i} 
-                className="cli-image-container w-full h-[80vh] md:h-[100vh] flex items-center justify-center p-4 md:p-12 xl:p-20"
+                className="workflow-image-container w-full h-[80vh] md:h-[100vh] flex items-center justify-center p-4 md:p-12 xl:p-20"
               >
                 <div 
-                  className={`relative w-full h-full max-h-[70vh] flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#050508] transition-all duration-500 cursor-zoom-in ${activeIndex === i ? 'shadow-[0_0_40px_rgba(46,242,142,0.15)] border-[var(--color-green-strong)]/40' : 'shadow-2xl'}`}
+                  className={`relative w-full h-full max-h-[70vh] flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#050508] transition-all duration-500 cursor-zoom-in ${activeIndex === i ? 'shadow-[0_0_40px_rgba(0,208,182,0.15)] border-[#00D0B6]/40' : 'shadow-2xl'}`}
                   onClick={() => {
                     setLightboxIndex(i);
                     setLightboxOpen(true);
                   }}
                 >
-                  {/* Fake Terminal Header */}
-                  <div className="flex items-center px-4 py-3 bg-[#0a0a0f] border-b border-white/5 shrink-0">
-                    <div className="flex gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                  {/* Diagram Header */}
+                  <div className="flex items-center justify-between px-6 py-4 bg-[#0a0a0f] border-b border-white/5 shrink-0">
+                    <div className="text-[11px] font-mono tracking-widest text-gray-500 uppercase">
+                      PIPELINE VIEWER
                     </div>
-                    <div className="mx-auto text-[10px] text-gray-500 font-mono tracking-wider">
-                      {item.src.split('/').pop()}
+                    <div className="text-[10px] text-gray-600 font-mono tracking-wider bg-white/5 px-2 py-1 rounded">
+                      {item.src.split('/').pop()?.replace(/%20/g, ' ')}
                     </div>
                   </div>
                   {/* Image */}
-                  <div className="relative flex-1 w-full bg-[#000]">
+                  <div className="relative flex-1 w-full bg-[#000] p-8">
                     <Image 
                       src={item.src} 
                       alt={item.title}
                       fill
-                      className="object-contain object-center"
+                      className="object-contain object-center opacity-90 transition-opacity duration-300 hover:opacity-100 p-4"
                       unoptimized
                     />
                   </div>
@@ -249,7 +251,7 @@ export default function CliShowcaseSection() {
               className="absolute left-[2%] md:left-[5%] text-white opacity-50 hover:opacity-100 text-5xl z-[210] p-4 transition-opacity"
               onClick={(e) => { 
                 e.stopPropagation(); 
-                setLightboxIndex(prev => (prev - 1 + CLI_DATA.length) % CLI_DATA.length); 
+                setLightboxIndex(prev => (prev - 1 + WORKFLOW_DATA.length) % WORKFLOW_DATA.length); 
               }}
             >
               ‹
@@ -258,10 +260,10 @@ export default function CliShowcaseSection() {
             {/* Image Container */}
             <div className="relative w-[90vw] h-[85vh] max-w-6xl max-h-[900px]" onClick={e => e.stopPropagation()}>
               <Image 
-                src={CLI_DATA[lightboxIndex].src}
-                alt={CLI_DATA[lightboxIndex].title}
+                src={WORKFLOW_DATA[lightboxIndex].src}
+                alt={WORKFLOW_DATA[lightboxIndex].title}
                 fill
-                className="object-contain"
+                className="object-contain p-4"
                 unoptimized
               />
             </div>
@@ -271,7 +273,7 @@ export default function CliShowcaseSection() {
               className="absolute right-[2%] md:right-[5%] text-white opacity-50 hover:opacity-100 text-5xl z-[210] p-4 transition-opacity"
               onClick={(e) => { 
                 e.stopPropagation(); 
-                setLightboxIndex(prev => (prev + 1) % CLI_DATA.length); 
+                setLightboxIndex(prev => (prev + 1) % WORKFLOW_DATA.length); 
               }}
             >
               ›
@@ -279,7 +281,7 @@ export default function CliShowcaseSection() {
 
             {/* Image Counter */}
             <div className="absolute bottom-[20px] left-1/2 -translate-x-1/2 text-white/80 text-sm font-mono tracking-widest z-[210]">
-              {lightboxIndex + 1} / {CLI_DATA.length}
+              {lightboxIndex + 1} / {WORKFLOW_DATA.length}
             </div>
           </motion.div>
         )}

@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import Link from 'next/link';
 import Image from 'next/image';
 import CliShowcaseSection from '../components/CliShowcaseSection';
+import WorkflowShowcaseSection from '../components/WorkflowShowcaseSection';
 
 // Features for the outline
 const FEATURE_SPEC = [
@@ -111,7 +112,6 @@ export default function HomePage() {
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [activeTab, setActiveTab] = useState<'contracts' | 'sandbox' | 'cli' | 'trading'>('contracts');
-  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   // Paper trading mock state
   const [usdBalance, setUsdBalance] = useState(10000);
@@ -1093,50 +1093,26 @@ export default function HomePage() {
       </section>
 
       {/* ── PIPELINE DIAGRAMS SHOWCASE ────────────────────────────────────────── */}
-      <section className="py-20 px-4 max-w-7xl mx-auto border-t border-white/5">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="page-kicker">System Architecture</div>
-          <h2 className="mt-4 font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            Comprehensive Pipeline Workflows.
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-gray-400">
-            Explore the detailed architectural flows and execution layers that power AgentForge.
-          </p>
-        </div>
+      <WorkflowShowcaseSection />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {[
-            { src: '/full%20workflow.png', name: 'Full Workflow Pipeline', isLarge: true },
-            { src: '/0x402%20pipeline.png', name: '0x402 Pipeline', isLarge: false },
-            { src: '/CRUD%20pipeline.png', name: 'CRUD Pipeline', isLarge: false },
-            { src: '/Gpu%20pipeline.png', name: 'GPU Pipeline', isLarge: false },
-            { src: '/T54%20trust%20layer%20pipeline.png', name: 'T54 Trust Layer Pipeline', isLarge: false },
-            { src: '/dev%20toolkit%20pipeline.png', name: 'Dev Toolkit Pipeline', isLarge: false },
-            { src: '/Execution%20Pipeline.png', name: 'Execution Pipeline', isLarge: false }
-          ].map((diagram, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              onClick={() => setExpandedImage(diagram.src)}
-              className={`page-panel group border border-white/10 bg-[#0b0b11] overflow-hidden flex flex-col rounded-2xl hover:border-[var(--color-green-strong)] hover:shadow-[0_0_25px_rgba(46,242,142,0.15)] transition-all duration-300 cursor-pointer h-full ${diagram.isLarge ? 'md:col-span-2 max-w-4xl mx-auto w-full' : ''} ${diagram.isCentered ? 'md:col-span-2 max-w-2xl mx-auto w-full' : ''}`}
-            >
-              <div className="relative w-full flex-1 min-h-[250px] bg-black/40 p-8 sm:p-12 flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={diagram.src} 
-                  alt={diagram.name}
-                  className="w-full h-full max-h-[300px] object-contain transition-transform duration-500 group-hover:scale-[1.02] opacity-85 group-hover:opacity-100"
-                />
-              </div>
-              <div className="p-6 border-t border-white/5 bg-black/20 flex items-center justify-between mt-auto shrink-0">
-                <h3 className="font-mono text-base md:text-lg font-bold text-white tracking-wider">{diagram.name}</h3>
-                <span className="text-[var(--color-green-strong)] opacity-0 group-hover:opacity-100 transition-opacity font-mono text-2xl">↗</span>
-              </div>
-            </motion.div>
-          ))}
+      {/* ── CLI PREVIEW HEADLINE ────────────────────────────────────────────── */}
+      <section className="w-full bg-[#050508] pt-32 pb-16 relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5 z-50 shadow-[0_-20px_50px_rgba(5,5,8,1)]">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[var(--color-green-strong)]/5 blur-[100px] rounded-full pointer-events-none" />
+        
+        <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
+          <div className="inline-flex items-center justify-center gap-2 px-3 py-1 mb-6 rounded-full border border-[var(--color-green-strong)]/30 bg-[var(--color-green-strong)]/10 text-[11px] font-mono tracking-widest text-[var(--color-green-strong)] uppercase">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Developer Experience
+          </div>
+          <h2 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
+            Command Line Interface.
+          </h2>
+          <p className="text-[#8b8b93] text-[15px] leading-[1.6] max-w-2xl mx-auto">
+            Experience complete control over your sandboxed agents, smart wallets, and decentralized pipelines directly from the terminal. The AgentForge CLI provides raw access to the protocol's core capabilities.
+          </p>
         </div>
       </section>
 
@@ -1173,43 +1149,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── IMAGE LIGHTBOX MODAL ────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {expandedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-8 cursor-zoom-out"
-            onClick={() => setExpandedImage(null)}
-          >
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute top-6 right-6 z-[110] p-3 bg-white/10 hover:bg-[var(--color-green-strong)] text-white hover:text-black rounded-full backdrop-blur-md transition-colors"
-              onClick={() => setExpandedImage(null)}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </motion.button>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              src={expandedImage}
-              alt="Expanded Workflow"
-              className="max-w-full max-h-[90vh] object-contain drop-shadow-[0_0_40px_rgba(46,242,142,0.15)] rounded-xl cursor-default"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
     </div>
   );
