@@ -134,7 +134,7 @@ export default function HomePage() {
     verifying: false
   });
 
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalScrollRef = useRef<HTMLDivElement>(null);
   const showcaseSectionRef = useRef<HTMLElement | null>(null);
   const showcaseHeaderRef = useRef<HTMLDivElement | null>(null);
   const showcaseTabsRef = useRef<HTMLDivElement | null>(null);
@@ -244,9 +244,11 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [cliCommand]);
 
-  // Terminal scroll to bottom
+  // Terminal scroll to bottom without pulling the entire window down
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (terminalScrollRef.current) {
+      terminalScrollRef.current.scrollTop = terminalScrollRef.current.scrollHeight;
+    }
   }, [terminalLines]);
 
   // Simulated live execution loop
@@ -432,10 +434,10 @@ export default function HomePage() {
           <div className="rounded-[1.25rem] p-4 bg-[rgba(8,8,15,0.48)] border border-white/6 backdrop-blur-md shadow-lg mb-10">
             <div ref={showcaseTabsRef} className="flex flex-wrap items-center justify-center gap-3 max-w-4xl mx-auto">
               {[
-                { id: 'contracts', label: 'Soroban Contracts', icon: '📝' },
-                { id: 'sandbox', label: 'Sandboxed Filesystem', icon: '📦' },
-                { id: 'cli', label: 'CLI Developer DX', icon: '💻' },
-                { id: 'trading', label: 'Paper Trading Engine', icon: '📈' }
+                { id: 'contracts', label: 'Soroban Contracts', icon: <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
+                { id: 'sandbox', label: 'Sandboxed Filesystem', icon: <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg> },
+                { id: 'cli', label: 'CLI Developer DX', icon: <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> },
+                { id: 'trading', label: 'Paper Trading Engine', icon: <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg> }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -462,35 +464,37 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
+              className="grid gap-12 lg:gap-16 lg:grid-cols-[1fr_1.1fr] max-w-7xl mx-auto w-full items-center"
             >
-              <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker text-sm text-gray-400">Soroban Contract Core</div>
-                <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
-                  Decentralized governance of agent life cycles.
-                </h3>
-                <p className="text-gray-400 text-sm md:text-[15px] leading-relaxed">
-                  Three native smart contracts manage registration, security assertions, token billing, and spend restrictions directly on the Stellar ledger.
-                </p>
+              <div className="space-y-8 flex flex-col justify-center">
+                <div>
+                  <div className="page-kicker text-sm text-[#00FFE5] tracking-widest font-mono mb-3">Soroban Contract Core</div>
+                  <h3 className="font-syne text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    Decentralized governance of agent life cycles.
+                  </h3>
+                  <p className="text-gray-400 text-[15px] mt-4 leading-relaxed max-w-lg">
+                    Three native smart contracts manage registration, security assertions, token billing, and spend restrictions directly on the Stellar ledger.
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="flex flex-col gap-5">
                   {FEATURE_SPEC.map((spec, idx) => (
                     <div
                       key={spec.title}
                       ref={(el) => void (showcaseFeatureRefs.current[idx] = el)}
                       onMouseEnter={() => animateGlassCard(showcaseFeatureRefs.current[idx], true)}
                       onMouseLeave={() => animateGlassCard(showcaseFeatureRefs.current[idx], false)}
-                      className="relative rounded-[1rem] p-5 border border-white bg-[rgba(255,255,255,0.03)] backdrop-blur-[6px] shadow-md hover:shadow-xl transition-shadow duration-400 overflow-hidden"
+                      className="group relative rounded-2xl p-6 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] backdrop-blur-md shadow-md transition-all duration-400 overflow-hidden cursor-default"
                     >
-                      <div className="absolute -inset-1 opacity-0 group-hover:opacity-20 transition-opacity duration-700 blur-2xl z-0 pointer-events-none" style={{ backgroundColor: spec.color }} />
-                      <div className="relative z-10 flex gap-4 items-start">
-                        <div className="mt-1 shrink-0 p-3 rounded-lg bg-[#0b0b11]/60 border border-white/5 shadow-inner flex items-center justify-center w-14 h-14">
-                          <div className="w-8 h-8 rounded-full" style={{ backgroundColor: spec.color }} />
+                      <div className="absolute -inset-1 opacity-0 group-hover:opacity-10 transition-opacity duration-700 blur-2xl z-0 pointer-events-none" style={{ backgroundColor: spec.color }} />
+                      <div className="relative z-10 flex gap-5 items-start">
+                        <div className="mt-1 shrink-0 p-3 rounded-xl bg-[#0b0b11] border border-white/5 shadow-inner flex items-center justify-center w-14 h-14">
+                          <div className="w-6 h-6 rounded-full shadow-[0_0_15px_currentColor]" style={{ backgroundColor: spec.color, color: spec.color }} />
                         </div>
-                        <div>
-                          <h4 className="text-[15px] font-bold text-white mb-1 tracking-wide">{spec.title}</h4>
-                          <span className="text-[10px] font-mono text-gray-500 block mb-2 uppercase tracking-widest" style={{ color: spec.color }}>{spec.subtitle}</span>
-                          <p className="text-xs text-gray-400 leading-relaxed transition-colors">{spec.description}</p>
+                        <div className="flex flex-col">
+                          <h4 className="text-[16px] font-bold text-white tracking-wide">{spec.title}</h4>
+                          <span className="text-[11px] font-mono mt-1 mb-2 uppercase tracking-widest" style={{ color: spec.color }}>{spec.subtitle}</span>
+                          <p className="text-[13px] text-gray-400 leading-relaxed">{spec.description}</p>
                         </div>
                       </div>
                     </div>
@@ -585,18 +589,20 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
+              className="grid gap-12 lg:gap-16 lg:grid-cols-[1fr_1.1fr] max-w-7xl mx-auto w-full items-center"
             >
-              <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker text-sm text-gray-400">Sandbox Isolation</div>
-                <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
-                  Strictly sandboxed agent environments.
-                </h3>
-                <p className="text-gray-400 text-sm md:text-[15px] leading-relaxed">
-                  Agents operate inside a lightweight **PRoot** sandbox wrapped with namespaces, strict cgroups, and strict seccomp restrictions. They can never escape to the host filesystem, and all signing must pass through the Soroban Policy contract.
-                </p>
+              <div className="space-y-8 flex flex-col justify-center">
+                <div>
+                  <div className="page-kicker text-sm text-[#00FFE5] tracking-widest font-mono mb-3">Sandbox Isolation</div>
+                  <h3 className="font-syne text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    Strictly sandboxed agent environments.
+                  </h3>
+                  <p className="text-gray-400 text-[15px] mt-4 leading-relaxed max-w-lg">
+                    Agents operate inside a lightweight **PRoot** sandbox wrapped with namespaces, strict cgroups, and strict seccomp restrictions. They can never escape to the host filesystem, and all signing must pass through the Soroban Policy contract.
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2 mt-2">
                   {[
                     { title: '/workspace', size: 'Active logic code' },
                     { title: '/config', size: 'YAML DAG definitions' },
@@ -606,25 +612,23 @@ export default function HomePage() {
                   ].map((folder) => {
                     const isSelected = selectedFolder === folder.title;
                     return (
-                      <button
+                      <div
                         key={folder.title}
                         onClick={() => setSelectedFolder(folder.title as typeof selectedFolder)}
-                        className={`group relative p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between overflow-hidden ${isSelected
-                            ? 'border-[#00FFE5]/50 bg-gradient-to-r from-[rgba(0,255,229,0.1)] to-[rgba(0,255,229,0.02)] shadow-[0_0_20px_rgba(0,255,229,0.1)]'
-                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]'
+                        className={`group relative py-3 px-4 rounded-xl text-left transition-all duration-300 flex items-center justify-between cursor-pointer border border-transparent ${isSelected
+                            ? 'bg-[#00FFE5]/5 border-[#00FFE5]/20 text-white shadow-[0_0_15px_rgba(0,255,229,0.05)]'
+                            : 'hover:bg-white/[0.02] text-gray-400'
                           }`}
                       >
-                        {/* Glow effect on select/hover */}
-                        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-r from-[#00FFE5] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} />
-                        
-                        <div className="relative z-10">
-                          <div className={`font-mono text-xs font-bold transition-colors ${isSelected ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>
-                            <span className="opacity-70 mr-2">📁</span>{folder.title}
+                        <div className="flex items-center gap-4">
+                          <svg className={`w-4 h-4 transition-colors ${isSelected ? 'text-[#00FFE5]' : 'text-gray-600 group-hover:text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                          <div className="flex flex-col">
+                            <div className={`font-mono text-[13px] tracking-wide ${isSelected ? 'font-bold' : ''}`}>{folder.title}</div>
+                            <div className={`text-[10px] font-mono mt-0.5 transition-colors ${isSelected ? 'text-[#00FFE5]/80' : 'text-gray-600'}`}>{folder.size}</div>
                           </div>
-                          <div className={`text-[10px] font-mono mt-1 transition-colors ${isSelected ? 'text-[#00FFE5]/80' : 'text-gray-500 group-hover:text-gray-400'}`}>{folder.size}</div>
                         </div>
-                        <span className={`relative z-10 font-mono text-xs transition-colors ${isSelected ? 'text-[#00FFE5]' : 'text-gray-700 group-hover:text-gray-500'}`}>➔</span>
-                      </button>
+                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-[#00FFE5] animate-pulse" />}
+                      </div>
                     );
                   })}
                 </div>
@@ -675,7 +679,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]"
+              className="grid gap-12 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr] max-w-7xl mx-auto w-full items-center"
             >
               {/* Simulated Terminal Widget */}
               <div className="page-panel p-6 border-white/10 bg-[#040407] font-mono flex flex-col min-h-[360px] justify-between relative group overflow-hidden">
@@ -693,8 +697,8 @@ export default function HomePage() {
                   </div>
 
                   {/* Terminal stdout logs */}
-                  <div className="space-y-1.5 text-[11px] leading-relaxed text-gray-300 min-h-[220px] max-h-[220px] overflow-y-auto">
-                    <div className="text-gray-500 font-bold">C:\Users\Developer\AgentForge&gt; {cliCommand}</div>
+                  <div ref={terminalScrollRef} className="space-y-1.5 text-[11px] leading-relaxed text-gray-300 min-h-[220px] max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="text-gray-500 font-bold mb-3">C:\Users\Developer\AgentForge&gt; {cliCommand}</div>
                     {terminalLines.map((line, idx) => {
                       if (!line) return null;
                       const isError = line.includes('❌') || line.includes('Failed');
@@ -709,60 +713,57 @@ export default function HomePage() {
                       );
                     })}
                     {isTyping && (
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 mt-2">
                         <span className="w-1.5 h-3.5 bg-white/70 animate-pulse inline-block" />
                         <span className="text-[10px] text-gray-600 uppercase tracking-widest italic animate-pulse">Running process...</span>
                       </div>
                     )}
-                    <div ref={terminalEndRef} />
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-white/5 bg-white/[0.01] flex items-center justify-between text-[10px] text-gray-500">
+                <div className="mt-4 p-3.5 rounded-xl border border-white/5 bg-white/[0.01] flex items-center justify-between text-[10px] text-gray-500">
                   <span>CLI Commands available. Click on the sidebar options to run.</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-green-strong)] animate-pulse" />
                 </div>
               </div>
 
               {/* Developer Command Selector */}
-              <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker text-sm text-gray-400">Developer DX</div>
-                <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
-                  CLI-first agent orchestration.
-                </h3>
-                <p className="text-gray-400 text-sm md:text-[15px] leading-relaxed">
-                  Developers can manage, validate, simulate, and launch agents using the modular `forge` CLI utility. Click on the commands below to simulate execution in the terminal:
-                </p>
+              <div className="space-y-8 flex flex-col justify-center">
+                <div>
+                  <div className="page-kicker text-sm text-[var(--color-green-strong)] tracking-widest font-mono mb-3">Developer DX</div>
+                  <h3 className="font-syne text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    CLI-first agent orchestration.
+                  </h3>
+                  <p className="text-gray-400 text-[15px] mt-4 leading-relaxed max-w-lg">
+                    Developers can manage, validate, simulate, and launch agents using the modular `forge` CLI utility. Click on the commands below to simulate execution in the terminal.
+                  </p>
+                </div>
 
-                <div className="space-y-3 font-mono">
+                <div className="flex flex-col gap-2 mt-2 font-mono">
                   {[
                     { cmd: 'forge init', desc: 'Initialize an agent workspace template.' },
-                    { cmd: 'forge run', desc: 'Compile YAML, spin up PRoot sandbox, and run agent DAG.' },
-                    { cmd: 'forge deploy', desc: 'Deploy compiled agent and register to Soroban Ledger.' },
-                    { cmd: 'forge monitor', desc: 'Stream real-time sandbox logs, CPU cycles, and paper PnL.' }
+                    { cmd: 'forge run', desc: 'Compile YAML, spin up PRoot sandbox.' },
+                    { cmd: 'forge deploy', desc: 'Deploy compiled agent to Soroban Ledger.' },
+                    { cmd: 'forge monitor', desc: 'Stream real-time sandbox logs and PnL.' }
                   ].map((item) => {
                     const isSelected = cliCommand === item.cmd;
                     return (
-                      <button
+                      <div
                         key={item.cmd}
-                        onClick={() => setCliCommand(item.cmd as typeof cliCommand)}
-                        disabled={isTyping}
-                        className={`group relative w-full p-4 rounded-xl border text-left transition-all duration-300 flex items-center justify-between disabled:opacity-50 overflow-hidden ${isSelected
-                            ? 'border-[var(--color-green-strong)]/50 bg-gradient-to-r from-[rgba(46,242,142,0.1)] to-[rgba(46,242,142,0.02)] shadow-[0_0_20px_rgba(46,242,142,0.1)]'
-                            : 'border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]'
+                        onClick={() => {
+                          if (!isTyping) setCliCommand(item.cmd as typeof cliCommand);
+                        }}
+                        className={`group relative py-3 px-4 rounded-xl text-left transition-all duration-300 flex items-center justify-between cursor-pointer border border-transparent ${isTyping ? 'opacity-50 pointer-events-none' : ''} ${isSelected
+                            ? 'bg-[var(--color-green-strong)]/10 border-[var(--color-green-strong)]/20 text-white shadow-[0_0_15px_rgba(46,242,142,0.05)]'
+                            : 'hover:bg-white/[0.02] text-gray-400'
                           }`}
                       >
-                        {/* Glow effect on hover/select */}
-                        <div className={`absolute inset-0 bg-gradient-to-r from-[var(--color-green-strong)] to-transparent opacity-0 transition-opacity duration-500 blur-xl ${isSelected ? 'opacity-10' : 'group-hover:opacity-5'}`} pointer-events-none />
-                        
-                        <div className="relative z-10">
-                          <div className={`text-xs font-bold ${isSelected ? 'text-[var(--color-green-strong)]' : 'text-white'}`}>
-                            {item.cmd}
-                          </div>
-                          <div className="text-[10px] text-gray-500 mt-1">{item.desc}</div>
+                        <div className="flex flex-col">
+                          <div className={`text-[13px] font-bold tracking-wide ${isSelected ? 'text-[var(--color-green-strong)]' : ''}`}>{item.cmd}</div>
+                          <div className={`text-[10px] mt-1 ${isSelected ? 'text-[var(--color-green-strong)]/80' : 'text-gray-500'}`}>{item.desc}</div>
                         </div>
-                        <span className={`text-xs ${isSelected ? 'text-[var(--color-green-strong)]' : 'text-gray-700'}`}>➔</span>
-                      </button>
+                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-green-strong)] animate-pulse shrink-0 ml-4" />}
+                      </div>
                     );
                   })}
                 </div>
@@ -778,16 +779,18 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className="grid gap-8 lg:grid-cols-[1fr_1.1fr]"
+              className="grid gap-12 lg:gap-16 lg:grid-cols-[1fr_1.1fr] max-w-7xl mx-auto w-full items-center"
             >
-              <div className="space-y-6 flex flex-col justify-center">
-                <div className="page-kicker text-sm text-gray-400">Risk Simulation Engine</div>
-                <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-white">
-                  Paper trade risk-free before deploying.
-                </h3>
-                <p className="text-gray-400 text-sm md:text-[15px] leading-relaxed">
-                  Before linking capital to smart contracts, AgentForge runtimes simulate swaps on the Stellar DEX. The Paper Trading Engine manages virtual balances, tracks positions, and monitors risk.
-                </p>
+              <div className="space-y-8 flex flex-col justify-center">
+                <div>
+                  <div className="page-kicker text-sm text-gray-400 tracking-widest font-mono mb-3">Risk Simulation Engine</div>
+                  <h3 className="font-syne text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    Paper trade risk-free before deploying.
+                  </h3>
+                  <p className="text-gray-400 text-[15px] mt-4 leading-relaxed max-w-lg">
+                    Before linking capital to smart contracts, AgentForge runtimes simulate swaps on the Stellar DEX. The Paper Trading Engine manages virtual balances, tracks positions, and monitors risk autonomously.
+                  </p>
+                </div>
 
                 {/* Simulated balances card */}
                 <div className="relative p-6 rounded-2xl border border-white/5 bg-[#08080f] shadow-inner font-mono overflow-hidden">
@@ -804,59 +807,10 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Form to submit a paper trade */}
-                <form onSubmit={handlePaperOrder} className="relative p-6 rounded-2xl border border-white/5 bg-white/[0.01] space-y-5 overflow-hidden group hover:bg-white/[0.02] hover:border-white/10 transition-all duration-300">
-                  <div className="absolute -inset-1 opacity-0 group-hover:opacity-10 transition-opacity duration-700 blur-2xl z-0 pointer-events-none bg-amber-500" />
-                  <div className="relative z-10 text-xs font-bold text-white font-mono flex items-center justify-between border-b border-white/5 pb-3">
-                    <span className="flex items-center gap-2"><span className="text-amber-500">⚡</span> Submit Simulated Paper Order</span>
-                    {newOrderSuccess && (
-                      <span className="text-[var(--color-green-strong)] font-bold animate-pulse">Order Executed Successfully!</span>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-gray-500 uppercase tracking-wider block">Quantity (XLM)</label>
-                      <input
-                        type="number"
-                        value={tradeQuantity}
-                        onChange={(e) => setTradeQuantity(e.target.value)}
-                        className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-xs font-mono text-white focus:outline-none focus:border-[#00FFE5]"
-                        placeholder="1000"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-gray-500 uppercase tracking-wider block">Action</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setTradeAsset('XLM')}
-                          className={`py-2 rounded-lg font-mono text-[10px] font-bold border transition-all ${tradeAsset === 'XLM'
-                              ? 'border-[#00FFE5] text-[#00FFE5] bg-[#00FFE5]/5'
-                              : 'border-white/10 text-gray-400'
-                            }`}
-                        >
-                          BUY XLM
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setTradeAsset('USDC')}
-                          className={`py-2 rounded-lg font-mono text-[10px] font-bold border transition-all ${tradeAsset === 'USDC'
-                              ? 'border-red-500 text-red-500 bg-red-500/10 shadow-[0_0_10px_rgba(239,68,68,0.1)]'
-                              : 'border-white/10 text-gray-400 hover:border-white/30'
-                            }`}
-                        >
-                          SELL XLM
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="relative z-10 w-full py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-green-strong)] to-[#00FFE5] text-black font-bold font-mono text-xs uppercase tracking-wider hover:brightness-110 hover:shadow-[0_0_20px_rgba(46,242,142,0.3)] transition-all duration-300"
-                  >
-                    Execute Swap via DexAdapter
-                  </button>
-                </form>
+                <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-500/5 border border-amber-500/10 text-amber-500 font-mono text-[11px] uppercase tracking-wider">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  <span>Automated DEX strategies are currently active in simulation mode.</span>
+                </div>
               </div>
 
               {/* Live paper trades list */}
