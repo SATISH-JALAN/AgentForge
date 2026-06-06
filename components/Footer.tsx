@@ -2,8 +2,8 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-[#050508] text-white pt-24 pb-8 px-6 md:px-12 border-t border-white/10 mt-20 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 mb-32 relative z-10">
+    <footer className="w-full bg-[#050508] text-white pt-24 pb-0 px-6 md:px-12 border-t border-white/10 mt-20 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 mb-20 relative z-10">
         
         {/* Resources */}
         <div className="flex-1">
@@ -65,8 +65,11 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="w-full text-center overflow-hidden flex justify-center items-center relative z-10 pointer-events-none select-none opacity-90 px-4">
-        <h1 className="text-[11.5vw] font-serif tracking-widest leading-none text-white m-0 p-0 whitespace-nowrap">
+      <div className="w-full relative flex justify-center items-end mt-10 z-10 pointer-events-none select-none">
+        <h1 
+          className="text-[13.5vw] font-serif tracking-tight text-white m-0 p-0 whitespace-nowrap translate-y-[35%]"
+          style={{ lineHeight: 0.75 }}
+        >
           AGENTFORGE
         </h1>
       </div>

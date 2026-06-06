@@ -190,7 +190,7 @@ export default function CliShowcaseSection() {
                 className="cli-image-container w-full h-[80vh] md:h-[100vh] flex items-center justify-center p-4 md:p-12 xl:p-20"
               >
                 <div 
-                  className={`relative w-full h-full max-h-[70vh] flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#050508] transition-all duration-500 cursor-zoom-in ${activeIndex === i ? 'shadow-[0_0_40px_rgba(46,242,142,0.15)] border-[var(--color-green-strong)]/40' : 'shadow-2xl'}`}
+                  className={`relative w-full h-auto flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#000] transition-all duration-500 cursor-zoom-in ${activeIndex === i ? 'shadow-[0_0_40px_rgba(46,242,142,0.15)] border-[var(--color-green-strong)]/40' : 'shadow-2xl'}`}
                   onClick={() => {
                     setLightboxIndex(i);
                     setLightboxOpen(true);
@@ -208,13 +208,11 @@ export default function CliShowcaseSection() {
                     </div>
                   </div>
                   {/* Image */}
-                  <div className="relative flex-1 w-full bg-[#000]">
-                    <Image 
+                  <div className="relative w-full bg-[#000] flex">
+                    <img 
                       src={item.src} 
                       alt={item.title}
-                      fill
-                      className="object-contain object-center"
-                      unoptimized
+                      className="w-full h-auto"
                     />
                   </div>
                 </div>

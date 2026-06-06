@@ -350,8 +350,8 @@ export default function HomePage() {
               className="flex flex-col items-center font-serif text-[clamp(2.9rem,7vw,6.2rem)] font-semibold leading-none tracking-[-0.08em] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.72)]"
             >
               <span className="block text-white leading-none">Agentic OS.</span>
-              <span className="mt-[0.04em] block text-white leading-none">
-                Built on{' '}
+              <span className="mt-[0.04em] block text-white leading-none" suppressHydrationWarning>
+                Execution layer on{' '}
                 <span className="inline-grid items-end align-bottom">
                   <span className="col-start-1 row-start-1 invisible pointer-events-none pr-[2px] border-r-[0.08em] border-transparent">
                     Stellar.
