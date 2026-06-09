@@ -12,15 +12,15 @@ if (typeof window !== 'undefined') {
 const VIDEOS = [
   { 
     id: "01", 
-    title: "Autonomous Trading Loop", 
-    desc: "Watch the sandboxed agent execute a high-frequency trading loop entirely on-chain.",
-    src: "/demo 1.mp4"
+    title: "Wallet Balance & Withdrawal", 
+    desc: "Watch the sandboxed agent manage its smart wallet balance and execute on-chain withdrawals.",
+    src: "/demo2.1.mp4"
   },
   { 
     id: "02", 
     title: "0x402 Micro-Settlement", 
     desc: "See the protocol handle sub-cent micro-settlements automatically as the workflow completes.",
-    src: "/demo 2.mp4"
+    src: "/demo1.1.mp4"
   }
 ];
 
